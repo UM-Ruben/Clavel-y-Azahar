@@ -1,0 +1,3 @@
+# Fallback SPA para Netlify: cualquier ruta sirve index.html (evita 404 en
+# enlaces directos como /colecciones o /contacto). Inofensivo en otros hosts.
+/*  /index.html  200

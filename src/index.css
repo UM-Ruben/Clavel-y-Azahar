@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e5e2db; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #c3c8c1; }
+
+/* Elegant underline input style */
+.input-elegant {
+  border-bottom: 1px solid #b18d48;
+  transition: border-color 0.3s ease;
+}
+.input-elegant:focus {
+  outline: none;
+  border-bottom-color: #061b0e;
+}
+
+/* Foco visible accesible para teclado (no aparece con el ratón) */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #061b0e;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.input-elegant:focus-visible {
+  outline: none;
+  border-bottom: 2px solid #061b0e;
+}
+
+/* Selection */
+::selection {
+  background-color: #d0e9d4;
+  color: #0b2013;
+}
+
+/* Campos de formulario del panel de administración */
+.admin-input {
+  width: 100%;
+  border: 1px solid #c3c8c1;
+  background: #fcf9f2;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+  color: #1c1c18;
+  transition: border-color 0.2s ease;
+}
+.admin-input:focus {
+  outline: none;
+  border-color: #061b0e;
+}

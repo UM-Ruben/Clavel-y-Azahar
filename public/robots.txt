@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+# Panel privado de gestión: no indexar.
+Disallow: /admin
+
+# TODO: sustituye el dominio por el real cuando publiques
+Sitemap: https://www.tudominio.com/sitemap.xml
