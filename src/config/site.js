@@ -14,17 +14,17 @@ export const site = {
   // --- Identidad ---------------------------------------------------------
   // Marca principal: lo que queremos que el cliente RECUERDE. Se usa en SEO,
   // copyright y lectores de pantalla. El negocio se adquiere por TRASPASO de
-  // «Entre Ramblas»; ese nombre se conserva en el eslogan (abajo, visible) y en
+  // «Entrerramblas»; ese nombre se conserva en el eslogan (abajo, visible) y en
   // el alternateName del JSON-LD de index.html, para no perder el SEO local.
   name: 'Clavel y Azahar',
   // Lockup de marca (logo + nombre grande + eslogan pequeño) en Navbar/Footer.
   brand: {
-    // Eslogan que conserva «Entre Ramblas» por el traspaso del negocio.
-    slogan: 'El nuevo aroma de Entre Ramblas',
+    // Eslogan que conserva «Entrerramblas» por el traspaso del negocio.
+    slogan: 'El nuevo aroma de Entrerramblas',
   },
   // Nombre anterior (traspaso). Mantenlo en el JSON-LD de index.html como
   // alternateName y en la ficha de Google Business para conservar el SEO local.
-  formerName: 'Entre Ramblas',
+  formerName: 'Entrerramblas',
   tagline: 'Floristería en Los Ramos, Murcia · diseño floral de temporada',
   // Dominio final, SIN barra al final. Se usa para canonical, OG y sitemap.
   domain: 'https://www.tudominio.com', // TODO: dominio real (ver PENDIENTES.md)

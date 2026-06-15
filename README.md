@@ -1,6 +1,6 @@
 # Clavel y Azahar 🌸 — Floristería en Los Ramos, Murcia
 
-Web de **Clavel y Azahar** (eslogan «El nuevo aroma de Entre Ramblas»), floristería en Los Ramos (Murcia). Negocio adquirido por traspaso de *Entre Ramblas*. Construida como Single Page Application (SPA) con **React**, **Vite** y **Tailwind CSS**. Los datos del negocio pendientes de confirmar están listados en [PENDIENTES.md](./PENDIENTES.md).
+Web de **Clavel y Azahar** (eslogan «El nuevo aroma de Entrerramblas»), floristería en Los Ramos (Murcia). Negocio adquirido por traspaso de *Entrerramblas*. Construida como Single Page Application (SPA) con **React**, **Vite** y **Tailwind CSS**. Los datos del negocio pendientes de confirmar están listados en [PENDIENTES.md](./PENDIENTES.md).
 
 ---
 

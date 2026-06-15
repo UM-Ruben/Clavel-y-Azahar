@@ -1,7 +1,7 @@
 # Datos pendientes para finalizar la web — Clavel y Azahar
 
-> Marca: **Clavel y Azahar** · eslogan «El nuevo aroma de Entre Ramblas».
-> El negocio se adquiere por **traspaso** de *Entre Ramblas*; ese nombre se
+> Marca: **Clavel y Azahar** · eslogan «El nuevo aroma de Entrerramblas».
+> El negocio se adquiere por **traspaso** de *Entrerramblas*; ese nombre se
 > conserva en el eslogan y en el `alternateName` del JSON-LD para no perder
 > el SEO local. Editar la marca en `src/config/site.js` (`name`, `brand.slogan`,
 > `formerName`) y, en paralelo, en `index.html` (meta + JSON-LD).
@@ -46,7 +46,7 @@ Lista de lo que hay que **pedir a la encargada** y dónde se aplica cada dato.
 - [ ] Calle y número de la tienda en Los Ramos
 - [ ] Confirmar código postal (¿30589?)
 - [ ] Coordenadas exactas (en Google Maps: clic derecho sobre la tienda → copiar coordenadas)
-- [ ] **IMPORTANTE (traspaso)**: la ficha de Google Business de *Entre Ramblas*
+- [ ] **IMPORTANTE (traspaso)**: la ficha de Google Business de *Entrerramblas*
   debe transferirse y **renombrarse a "Clavel y Azahar"** (así se conservan
   reseñas, antigüedad y posición local). Confirmar el nombre EXACTO con el que
   figura hoy la ficha para casar el `alternateName` del JSON-LD. Nombre y

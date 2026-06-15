@@ -13,13 +13,23 @@ export default function Navbar() {
     <nav className="bg-surface/80 backdrop-blur-md fixed top-0 w-full border-b border-outline-variant z-50">
       {/* Desktop bar */}
       <div className="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-        {/* Emblema de marca (ya incluye el nombre, por eso va solo) */}
+        {/* Emblema (sello) + nombre en Playfair legible + eslogan del traspaso.
+            El texto del emblema es muy fino a este tamaño, por eso el nombre se
+            repite al lado en grande para que se lea bien. */}
         <NavLink
           to="/"
           aria-label={`${site.name} — Inicio`}
-          className="flex items-center text-primary"
+          className="flex items-center gap-3 text-primary"
         >
-          <Logo className="h-16 w-auto shrink-0" />
+          <Logo className="h-12 w-auto md:h-14 shrink-0" />
+          <span className="flex flex-col leading-tight">
+            <span className="font-headline text-xl md:text-2xl text-primary tracking-tight">
+              {site.name}
+            </span>
+            <span className="font-body-md text-[9px] md:text-[10px] uppercase tracking-[0.15em] md:tracking-[0.18em] text-on-surface-variant whitespace-nowrap">
+              {site.brand.slogan}
+            </span>
+          </span>
         </NavLink>
 
         {/* Desktop links */}
