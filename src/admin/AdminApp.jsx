@@ -65,7 +65,7 @@ function AdminInner() {
       <header className="border-b border-outline-variant bg-surface-container-lowest sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Logo className="h-9 w-auto" />
+            <Logo className="h-11 w-auto" />
             <span className="font-headline text-lg text-primary hidden sm:inline">Panel de gestión</span>
           </div>
           <div className="flex items-center gap-4">

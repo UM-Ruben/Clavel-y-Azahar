@@ -35,14 +35,8 @@ export default function Footer() {
         <div className="flex flex-col lg:flex-row lg:justify-between gap-12">
           {/* Brand */}
           <div className="max-w-sm">
-            <div className="flex items-center gap-3 text-primary">
-              <Logo className="h-14 w-auto shrink-0" />
-              <span className="flex flex-col leading-tight">
-                <span className="font-headline text-2xl text-primary">{site.name}</span>
-                <span className="font-body-md text-[10px] uppercase tracking-[0.18em] text-on-surface-variant">
-                  {site.brand.slogan}
-                </span>
-              </span>
+            <div className="text-primary">
+              <Logo className="h-28 w-auto" />
             </div>
             <p className="font-body-md text-body-md text-on-surface-variant mt-6">
               Escaparate de floristería boutique. Diseño floral estacional, decoración de espacios
