@@ -32,13 +32,20 @@ export default function Footer() {
   return (
     <footer className="bg-surface-container-low w-full pt-16 pb-10 border-t border-outline-variant/50">
       <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-        <div className="flex flex-col lg:flex-row lg:justify-between gap-12">
-          {/* Brand */}
-          <div className="max-w-sm">
-            <div className="text-primary">
-              <Logo className="h-28 w-auto" />
+        {/* Rejilla repartida: marca (emblema + nombre) | Explora | Contacto */}
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-x-8 gap-y-12 items-start">
+          {/* Marca: emblema + nombre, alineado para que no quede suelto */}
+          <div className="col-span-2 md:col-span-6">
+            <div className="flex items-center gap-4 text-primary">
+              <Logo className="h-24 w-auto shrink-0" />
+              <span className="flex flex-col leading-tight">
+                <span className="font-headline text-2xl text-primary">{site.name}</span>
+                <span className="font-body-md text-[10px] uppercase tracking-[0.18em] text-on-surface-variant whitespace-nowrap">
+                  {site.brand.slogan}
+                </span>
+              </span>
             </div>
-            <p className="font-body-md text-body-md text-on-surface-variant mt-6">
+            <p className="font-body-md text-body-md text-on-surface-variant mt-6 max-w-sm">
               Escaparate de floristería boutique. Diseño floral estacional, decoración de espacios
               y atención personalizada en tienda en {site.address.district}, {site.address.city}.
             </p>
@@ -61,49 +68,48 @@ export default function Footer() {
             )}
           </div>
 
-          {/* Enlaces + contacto */}
-          <div className="flex gap-12 sm:gap-20">
-            <div>
-              <p className="uppercase tracking-widest text-xs text-on-tertiary-container mb-4 font-semibold">
-                Explora
-              </p>
-              <div className="space-y-3 text-on-surface-variant">
-                <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/colecciones">
-                  Colecciones
-                </Link>
-                <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/servicios">
-                  Servicios
-                </Link>
-                <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/eventos">
-                  Eventos
-                </Link>
-                <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/contacto">
-                  Contacto
-                </Link>
-              </div>
-            </div>
-
-            <div>
-              <p className="uppercase tracking-widest text-xs text-on-tertiary-container mb-4 font-semibold">
+          {/* Explora */}
+          <nav className="col-span-1 md:col-span-3">
+            <p className="uppercase tracking-widest text-xs text-on-tertiary-container mb-4 font-semibold">
+              Explora
+            </p>
+            <div className="space-y-3 text-on-surface-variant">
+              <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/colecciones">
+                Colecciones
+              </Link>
+              <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/servicios">
+                Servicios
+              </Link>
+              <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/eventos">
+                Eventos
+              </Link>
+              <Link className="block hover:text-primary transition-colors font-body-md text-body-md" to="/contacto">
                 Contacto
-              </p>
-              <address className="not-italic space-y-3 text-on-surface-variant">
-                <p className="font-body-md text-body-md">
-                  {site.address.street}
-                  <br />
-                  {site.address.postalCode} {site.address.city}
-                </p>
-                <a
-                  className="block hover:text-primary transition-colors font-body-md text-body-md"
-                  href={`tel:${site.phoneTel}`}
-                >
-                  {site.phoneHuman}
-                </a>
-                <p className="font-body-md text-body-md text-sm opacity-80">
-                  {site.hours[0].days}: {site.hours[0].time}
-                </p>
-              </address>
+              </Link>
             </div>
+          </nav>
+
+          {/* Contacto */}
+          <div className="col-span-1 md:col-span-3">
+            <p className="uppercase tracking-widest text-xs text-on-tertiary-container mb-4 font-semibold">
+              Contacto
+            </p>
+            <address className="not-italic space-y-3 text-on-surface-variant">
+              <p className="font-body-md text-body-md">
+                {site.address.street}
+                <br />
+                {site.address.postalCode} {site.address.city}
+              </p>
+              <a
+                className="block hover:text-primary transition-colors font-body-md text-body-md"
+                href={`tel:${site.phoneTel}`}
+              >
+                {site.phoneHuman}
+              </a>
+              <p className="font-body-md text-body-md text-sm opacity-80">
+                {site.hours[0].days}: {site.hours[0].time}
+              </p>
+            </address>
           </div>
         </div>
 
