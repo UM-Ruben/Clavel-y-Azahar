@@ -85,7 +85,7 @@ function AdminInner() {
 
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6">
         {/* Pestañas */}
-        <nav className="flex gap-1 mb-8 overflow-x-auto border-b border-outline-variant">
+        <nav className="flex gap-1 mb-8 overflow-x-auto no-scrollbar border-b border-outline-variant">
           {TABS.map((t) => (
             <button
               key={t.key}

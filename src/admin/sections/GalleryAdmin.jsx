@@ -146,7 +146,11 @@ function SectionEditor({ section }) {
           {section.single ? (
             <div className="flex flex-col sm:flex-row gap-8">
               <div className="max-w-[320px] w-full">
+                {/* La `key` fuerza a recrear el uploader cuando cambia (o se
+                    quita) la foto: así su vista previa interna se reinicia y no
+                    se queda enseñando la imagen anterior. */}
                 <ImageUploader
+                  key={photos[0]?.id || 'nueva'}
                   folder={section.key}
                   currentUrl={photos[0]?.image_url || null}
                   onUploaded={handleUploaded}
@@ -154,9 +158,19 @@ function SectionEditor({ section }) {
                   aspect={section.aspect}
                 />
                 {photos[0] && (
-                  <div className="mt-4">
-                    <PhotoFields key={photos[0].id} photo={photos[0]} fields={section.fields} onChange={patch} />
-                  </div>
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setConfirm(photos[0])}
+                      className="mt-3 text-sm text-error hover:underline flex items-center gap-1"
+                    >
+                      <span className="material-symbols-outlined text-base" aria-hidden="true">delete</span>
+                      Quitar foto
+                    </button>
+                    <div className="mt-4">
+                      <PhotoFields key={photos[0].id} photo={photos[0]} fields={section.fields} onChange={patch} />
+                    </div>
+                  </>
                 )}
               </div>
               <SectionPreview sectionKey={section.key} page={section.group} imageUrl={photos[0]?.image_url || null} />

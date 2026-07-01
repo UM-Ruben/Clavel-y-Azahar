@@ -13,6 +13,14 @@
 ::-webkit-scrollbar-thumb { background: #e5e2db; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #c3c8c1; }
 
+/* Oculta la barra de scroll en carruseles/pestañas donde molesta (el
+   contenido sigue pudiéndose desplazar). `overflow-x-auto` obliga a que
+   `overflow-y` se comporte como `auto`, y con la barra personalizada de arriba
+   aparecía una barra vertical «fantasma» de 8px (p. ej. en las pestañas del
+   panel). Con esto se oculta sin recortar nada. */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Elegant underline input style */
 .input-elegant {
   border-bottom: 1px solid #b18d48;
