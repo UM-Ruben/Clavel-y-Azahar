@@ -33,8 +33,10 @@ export const site = {
   phoneHuman: '+34 91 234 56 78', // TODO: teléfono real (ver PENDIENTES.md)
   phoneTel: '+34912345678', // TODO: mismo teléfono en formato tel: (sin espacios)
 
-  // Número de WhatsApp en formato internacional SIN «+», espacios ni guiones.
-  whatsapp: '34600000000', // TODO: WhatsApp real (ver PENDIENTES.md)
+  // Número de WhatsApp. Puedes escribirlo con el MISMO formato que el teléfono
+  // de arriba (con «+», espacios o guiones): al generar el enlace se queda solo
+  // con los dígitos. Debe incluir el prefijo del país (34 en España).
+  whatsapp: '+34 600 00 00 00', // TODO: WhatsApp real (ver PENDIENTES.md)
   whatsappMessage: 'Hola, me gustaría hacer una consulta sobre vuestras flores.',
 
   email: 'hola@tudominio.com', // TODO: email real del negocio (ver PENDIENTES.md)
@@ -81,4 +83,11 @@ export const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destina
   `${site.address.street}, ${site.address.postalCode} ${site.address.city}`
 )}`
 
-export const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage)}`
+// Deja un número en solo dígitos (quita «+», espacios y guiones), como lo
+// necesita el enlace de wa.me. Así el WhatsApp se puede escribir con el mismo
+// formato que el teléfono y aun así el enlace funciona.
+export function waDigits(value) {
+  return String(value || '').replace(/\D/g, '')
+}
+
+export const whatsappUrl = `https://wa.me/${waDigits(site.whatsapp)}?text=${encodeURIComponent(site.whatsappMessage)}`

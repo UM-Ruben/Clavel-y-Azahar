@@ -1,12 +1,17 @@
 import { useBusiness } from '../lib/content'
+import { waDigits } from '../config/site'
 
 export default function WhatsAppButton() {
   const site = useBusiness()
 
-  // No mostrar el botón si aún no hay número configurado.
-  if (!site.whatsapp || site.whatsapp === '34600000000') return null
+  // Se normaliza a solo dígitos: la dueña puede escribir el número con «+»,
+  // espacios o guiones (igual que el teléfono) y el enlace de wa.me funciona.
+  const digits = waDigits(site.whatsapp)
 
-  const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage || '')}`
+  // No mostrar el botón si aún no hay número real (vacío o el de ejemplo).
+  if (!digits || digits === '34600000000') return null
+
+  const whatsappUrl = `https://wa.me/${digits}?text=${encodeURIComponent(site.whatsappMessage || '')}`
 
   return (
     <a

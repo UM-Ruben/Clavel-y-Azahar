@@ -54,7 +54,7 @@ export default function BusinessAdmin() {
       <Group title="Contacto">
         <Field label="Teléfono (cómo se muestra)"><input className="admin-input" value={form.phone_human} onChange={(e) => set('phone_human', e.target.value)} placeholder={site.phoneHuman} /></Field>
         <Field label="Teléfono (para llamar, sin espacios)"><input className="admin-input" value={form.phone_tel} onChange={(e) => set('phone_tel', e.target.value)} placeholder={site.phoneTel} /></Field>
-        <Field label="WhatsApp (formato 34XXXXXXXXX)"><input className="admin-input" value={form.whatsapp} onChange={(e) => set('whatsapp', e.target.value)} placeholder={site.whatsapp} /></Field>
+        <Field label="WhatsApp (con prefijo del país, ej. +34 600 00 00 00)"><input className="admin-input" value={form.whatsapp} onChange={(e) => set('whatsapp', e.target.value)} placeholder={site.whatsapp} /></Field>
         <Field label="Mensaje inicial de WhatsApp"><input className="admin-input" value={form.whatsapp_message} onChange={(e) => set('whatsapp_message', e.target.value)} placeholder={site.whatsappMessage} /></Field>
         <Field label="Email"><input className="admin-input" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder={site.email} /></Field>
       </Group>
