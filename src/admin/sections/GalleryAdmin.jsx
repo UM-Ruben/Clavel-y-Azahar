@@ -7,6 +7,7 @@ import { GALLERY_SECTIONS, FIELD_LABELS } from '../galleryConfig'
 import { listPhotos, addPhoto, updatePhoto, deletePhoto, swapPhotoOrder } from '../db'
 import ImageUploader from '../components/ImageUploader'
 import ConfirmDialog from '../components/ConfirmDialog'
+import SectionPreview from '../components/SectionPreview'
 import { useToast } from '../components/Toast'
 
 export default function GalleryAdmin() {
@@ -142,26 +143,34 @@ function SectionEditor({ section }) {
       ) : (
         <div className="space-y-6">
           {section.single ? (
-            <div className="max-w-md">
-              <ImageUploader
-                folder={section.key}
-                currentUrl={photos[0]?.image_url || null}
-                onUploaded={handleUploaded}
-                label={photos.length ? 'Cambiar foto' : 'Subir foto'}
-              />
-              {photos[0] && (
-                <div className="mt-4">
-                  <PhotoFields photo={photos[0]} fields={section.fields} onChange={patch} />
-                </div>
-              )}
+            <div className="flex flex-col sm:flex-row gap-8">
+              <div className="max-w-md w-full">
+                <ImageUploader
+                  folder={section.key}
+                  currentUrl={photos[0]?.image_url || null}
+                  onUploaded={handleUploaded}
+                  label={photos.length ? 'Cambiar foto' : 'Subir foto'}
+                />
+                {photos[0] && (
+                  <div className="mt-4">
+                    <PhotoFields photo={photos[0]} fields={section.fields} onChange={patch} />
+                  </div>
+                )}
+              </div>
+              <SectionPreview sectionKey={section.key} page={section.group} imageUrl={photos[0]?.image_url || null} />
             </div>
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {photos.map((p, i) => (
                   <div key={p.id} className="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
-                    <div className="aspect-[4/3] bg-surface-container-low">
-                      <img src={p.image_url} alt={p.alt || ''} className="w-full h-full object-cover" />
+                    <div className="p-4 pb-0">
+                      <SectionPreview
+                        sectionKey={section.key}
+                        page={section.group}
+                        imageUrl={p.image_url}
+                        fields={{ title: p.title, desc: p.description, badge: p.badge }}
+                      />
                     </div>
                     <div className="p-4 space-y-3">
                       <PhotoFields photo={p} fields={section.fields} onChange={patch} />
@@ -185,7 +194,7 @@ function SectionEditor({ section }) {
 
               {showUploader && (
                 <div className="max-w-md">
-                  <ImageUploader folder={section.key} onUploaded={handleUploaded} label="Añadir foto" />
+                  <ImageUploader key={photos.length} folder={section.key} onUploaded={handleUploaded} label="Añadir foto" />
                 </div>
               )}
             </>

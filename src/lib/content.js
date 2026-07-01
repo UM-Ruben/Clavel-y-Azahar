@@ -25,27 +25,45 @@ function useQuery(key, run) {
 
   useEffect(() => {
     if (!isSupabaseConfigured) return
+    let active = true
+
+    function refresh(showLoading) {
+      if (showLoading) setLoading(true)
+      run()
+        .then((result) => {
+          if (!active) return
+          cache.set(key, result)
+          setData(result)
+        })
+        .catch(() => {
+          // Silencio intencionado: el componente caerá a su valor por defecto.
+        })
+        .finally(() => {
+          if (active) setLoading(false)
+        })
+    }
+
     if (cache.has(key)) {
       setData(cache.get(key))
       setLoading(false)
-      return
+    } else {
+      refresh(true)
     }
-    let active = true
-    setLoading(true)
-    run()
-      .then((result) => {
-        if (!active) return
-        cache.set(key, result)
-        setData(result)
-      })
-      .catch(() => {
-        // Silencio intencionado: el componente caerá a su valor por defecto.
-      })
-      .finally(() => {
-        if (active) setLoading(false)
-      })
+
+    // La caché es por pestaña: si se edita algo en el panel desde OTRA pestaña
+    // (o desde el móvil), esta pestaña no se entera. Al volver a mirarla,
+    // refrescamos en segundo plano (sin quitar lo que ya se ve) para que
+    // recoja los cambios sin necesidad de recargar a mano.
+    function onFocusBack() {
+      if (document.visibilityState === 'visible') refresh(false)
+    }
+    document.addEventListener('visibilitychange', onFocusBack)
+    window.addEventListener('focus', onFocusBack)
+
     return () => {
       active = false
+      document.removeEventListener('visibilitychange', onFocusBack)
+      window.removeEventListener('focus', onFocusBack)
     }
     // `key` identifica la consulta; `run` se asume estable para esa key.
     // eslint-disable-next-line react-hooks/exhaustive-deps

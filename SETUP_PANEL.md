@@ -45,7 +45,10 @@ Tiempo estimado: **15 minutos**, una sola vez.
 
 1. Menú lateral → **Project Settings** → **API** (o **Data API**).
 2. Copia estos dos valores:
-   - **Project URL** (algo como `https://abcdxyz.supabase.co`)
+   - **Project URL** (algo como `https://abcdxyz.supabase.co`) — **solo el dominio**,
+     sin nada más al final. Si Supabase te enseña la URL con `/rest/v1/` pegado
+     detrás, **no copies esa parte**: con ella el login y el panel no funcionan
+     aunque el usuario y la contraseña sean correctos.
    - **anon public** key (una cadena larga). *No uses la `service_role`.*
 
 ## 5. Conectar la web (en local)

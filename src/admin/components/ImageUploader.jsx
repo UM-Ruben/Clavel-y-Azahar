@@ -48,7 +48,6 @@ export default function ImageUploader({ folder = 'general', currentUrl = null, o
     <div>
       {label && <p className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2">{label}</p>}
       <div
-        onClick={() => !busy && inputRef.current?.click()}
         onDragOver={(e) => {
           e.preventDefault()
           setDrag(true)
@@ -59,20 +58,42 @@ export default function ImageUploader({ folder = 'general', currentUrl = null, o
           setDrag(false)
           handleFile(e.dataTransfer.files?.[0])
         }}
-        className={`relative cursor-pointer rounded-lg border-2 border-dashed transition-colors overflow-hidden ${
-          drag ? 'border-primary bg-primary-fixed/40' : 'border-outline-variant bg-surface-container-low hover:border-surface-tint'
+        className={`relative rounded-lg border-2 border-dashed transition-colors overflow-hidden ${
+          drag ? 'border-primary bg-primary-fixed/40' : 'border-outline-variant bg-surface-container-low'
         } ${preview ? 'aspect-[4/3]' : 'aspect-[4/3] flex items-center justify-center'}`}
       >
         {preview ? (
-          <img src={preview} alt="Vista previa" className="w-full h-full object-cover" />
+          <>
+            <img src={preview} alt="Vista previa" className="w-full h-full object-cover" />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent pt-6 pb-3 px-3 flex justify-center">
+              <button
+                type="button"
+                onClick={() => !busy && inputRef.current?.click()}
+                disabled={busy}
+                className="bg-white text-on-surface font-label-sm text-xs uppercase tracking-wider px-4 py-2 rounded-full shadow-sm flex items-center gap-1.5 hover:bg-surface-container disabled:opacity-60"
+              >
+                <span className="material-symbols-outlined text-base" aria-hidden="true">edit</span>
+                Cambiar foto
+              </button>
+            </div>
+          </>
         ) : (
-          <div className="text-center px-4 pointer-events-none">
+          <div className="text-center px-4">
             <span className="material-symbols-outlined text-4xl text-outline" aria-hidden="true">
               add_photo_alternate
             </span>
-            <p className="font-body-md text-sm text-on-surface-variant mt-2">
-              Arrastra una foto aquí o haz clic para elegir
+            <p className="font-body-md text-sm text-on-surface-variant mt-2 mb-4">
+              Arrastra una foto aquí, o…
             </p>
+            <button
+              type="button"
+              onClick={() => !busy && inputRef.current?.click()}
+              disabled={busy}
+              className="bg-primary text-on-primary font-label-sm text-xs uppercase tracking-wider px-5 py-2.5 rounded-full flex items-center gap-1.5 mx-auto hover:bg-surface-tint transition-colors disabled:opacity-60"
+            >
+              <span className="material-symbols-outlined text-base" aria-hidden="true">upload</span>
+              Elegir foto
+            </button>
           </div>
         )}
 
