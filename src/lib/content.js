@@ -95,7 +95,14 @@ export function usePhotos(category) {
 // array de ejemplo en modo demo (ver src/lib/demoMode.jsx); en la web real
 // devuelve un array vacío, para que la página muestre un hueco neutro en vez
 // de fotos de mentira.
+//
+// En modo demo enseñamos SIEMPRE las fotos de ejemplo (nunca las reales de
+// Supabase): la vista /demo es un escaparate del diseño y debe verse completa
+// siempre, sin depender de lo que haya —o falte, o esté roto— en la BD. Antes
+// usaba la foto real si existía, y si esa foto se había borrado del Storage la
+// demo salía vacía (con el hueco «image» en vez del diseño relleno).
 export function photosOr(dbPhotos, fallback, demoMode = false) {
+  if (demoMode) return fallback
   if (dbPhotos && dbPhotos.length > 0) {
     return dbPhotos.map((p) => ({
       img: p.image_url,
@@ -105,14 +112,16 @@ export function photosOr(dbPhotos, fallback, demoMode = false) {
       desc: p.description || '',
     }))
   }
-  return demoMode ? fallback : []
+  return []
 }
 
-// URL de la primera foto de una categoría (huecos de 1 sola imagen). Sin
-// fotos reales y fuera de modo demo, devuelve `null` (hueco neutro).
+// URL de la primera foto de una categoría (huecos de 1 sola imagen). En modo
+// demo, siempre la foto de ejemplo (ver nota en photosOr). Fuera de demo: la
+// foto real si existe, o `null` (hueco neutro) si no hay.
 export function firstPhotoUrl(dbPhotos, fallbackUrl, demoMode = false) {
+  if (demoMode) return fallbackUrl
   if (dbPhotos && dbPhotos.length > 0) return dbPhotos[0].image_url
-  return demoMode ? fallbackUrl : null
+  return null
 }
 
 // ---- Eventos próximos (no caducados) ---------------------------------------
