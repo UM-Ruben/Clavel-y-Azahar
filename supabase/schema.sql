@@ -123,8 +123,13 @@ insert into public.business (id) values (1) on conflict (id) do nothing;
 -- ----------------------------------------------------------------------------
 --  3. ALMACENAMIENTO DE FOTOS (Storage)
 -- ----------------------------------------------------------------------------
--- Bucket público «media»: las fotos se ven por URL sin permisos; subir/borrar
--- requiere sesión de la dueña.
+-- Bucket público «media»: al ser «public», las fotos se ven por su URL pública
+-- (getPublicUrl) SIN pasar por RLS — por eso no hace falta (ni conviene) una
+-- política de SELECT abierta a cualquiera: esta app nunca usa `.list()`, así
+-- que esa política solo serviría para que cualquiera (con la anon key, que es
+-- pública) pudiera listar TODOS los archivos del bucket. La quitamos: subir/
+-- borrar sigue requiriendo sesión de la dueña, y ver las fotos por su URL no
+-- se ve afectado.
 insert into storage.buckets (id, name, public)
 values ('media', 'media', true)
 on conflict (id) do nothing;
@@ -134,8 +139,6 @@ drop policy if exists "media_insert_auth"     on storage.objects;
 drop policy if exists "media_update_auth"     on storage.objects;
 drop policy if exists "media_delete_auth"     on storage.objects;
 
-create policy "media_read_public" on storage.objects
-  for select using (bucket_id = 'media');
 create policy "media_insert_auth" on storage.objects
   for insert to authenticated with check (bucket_id = 'media');
 create policy "media_update_auth" on storage.objects
