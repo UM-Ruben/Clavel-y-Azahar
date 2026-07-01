@@ -32,8 +32,11 @@ export default function Navbar() {
           </span>
         </NavLink>
 
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop links. Aparecen en lg (1024px), no en md: el bloque
+            logo+nombre+eslogan + 5 enlaces + teléfono necesita ~1000px para no
+            solaparse (margin-desktop = 80px a cada lado). Por debajo de lg se
+            usa la fila de enlaces compacta de abajo. */}
+        <div className="hidden lg:flex items-center gap-6 xl:gap-8">
           <NavLink
             to="/"
             end
@@ -75,13 +78,14 @@ export default function Navbar() {
             className="flex items-center gap-2 hover:opacity-70 transition-opacity focus-visible:outline-2"
           >
             <span className="material-symbols-outlined" aria-hidden="true">call</span>
-            <span className="hidden lg:inline font-body-md text-body-md">{site.phoneHuman}</span>
+            {/* El número solo desde xl: en lg el navbar ya va justo de ancho. */}
+            <span className="hidden xl:inline font-body-md text-body-md">{site.phoneHuman}</span>
           </a>
         </div>
       </div>
 
-      {/* Mobile scroll links */}
-      <div className="md:hidden border-t border-outline-variant/60">
+      {/* Enlaces en fila (móvil y tablet, por debajo de lg) */}
+      <div className="lg:hidden border-t border-outline-variant/60">
         <div className="px-margin-mobile py-3 flex gap-5 overflow-x-auto text-sm text-on-surface-variant">
           <NavLink
             to="/"
