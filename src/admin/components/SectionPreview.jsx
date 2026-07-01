@@ -2,6 +2,7 @@
 // mismo recorte, forma y textos superpuestos que usa la página pública real
 // para esta sección (ver src/pages/Inicio.jsx, Colecciones.jsx, Servicios.jsx
 // y Contacto.jsx), para que la dueña vea el encuadre antes de publicar la foto.
+import SmartImage from '../../components/SmartImage'
 export default function SectionPreview({ sectionKey, page, imageUrl, fields = {} }) {
   return (
     <div>
@@ -23,8 +24,10 @@ function Placeholder({ className = '' }) {
   )
 }
 
+// Si la foto ya no existe (borrada del Storage), SmartImage cae al mismo hueco
+// neutro del panel en vez de mostrar el icono de imagen rota.
 function Photo({ src, className }) {
-  return src ? <img src={src} alt="" className={className} /> : <Placeholder className={className} />
+  return <SmartImage src={src} alt="" className={className} fallback={<Placeholder className={className} />} />
 }
 
 function variant(key, img, { title, desc, badge } = {}) {

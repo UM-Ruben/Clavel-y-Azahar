@@ -5,6 +5,7 @@ import { usePhotos, photosOr, useContent } from '../lib/content'
 import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyGallery from '../components/EmptyGallery'
+import SmartImage from '../components/SmartImage'
 
 // Imágenes de ejemplo autoalojadas en /public/demo (ver nota en Inicio.jsx:
 // antes enlazaban a previsualizaciones internas de Google poco fiables).
@@ -102,7 +103,7 @@ export default function Colecciones() {
           {temporada.map((card, i) => (
             <Link to="/contacto" key={card.title || i} className="group cursor-pointer block">
               <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-low mb-6">
-                <img
+                <SmartImage
                   alt={card.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   src={card.img}
@@ -144,7 +145,7 @@ export default function Colecciones() {
               className="group flex flex-col md:flex-row gap-8 items-center bg-surface-container-low p-8 rounded-DEFAULT border-[0.5px] border-outline-variant hover:shadow-[0_8px_30px_rgba(6,27,14,0.05)] transition-all duration-300"
             >
               <div className="relative w-full md:w-1/2 aspect-square overflow-hidden">
-                <img
+                <SmartImage
                   alt={c.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   src={c.img}
@@ -182,7 +183,7 @@ export default function Colecciones() {
           {plantas.map((p, i) => (
             <Link to="/contacto" key={p.title || i} className="group cursor-pointer text-center block">
               <div className="relative aspect-square overflow-hidden rounded-full border border-outline-variant mb-6 mx-auto w-4/5">
-                <img
+                <SmartImage
                   alt={p.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   src={p.img}

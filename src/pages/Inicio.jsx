@@ -4,8 +4,8 @@ import Seo from '../components/Seo'
 import { usePhotos, photosOr, firstPhotoUrl, useContent } from '../lib/content'
 import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
-import EmptyPhoto from '../components/EmptyPhoto'
 import EmptyGallery from '../components/EmptyGallery'
+import SmartImage from '../components/SmartImage'
 
 // Imagen por defecto del hero (se usa si la dueña no ha subido la suya).
 // Autoalojadas en /public/demo — antes enlazaban a lh3.googleusercontent.com/
@@ -37,7 +37,7 @@ const featuredDefault = [
 
 export default function Inicio() {
   const demoMode = useDemoMode()
-  const { photos: heroPhotos } = usePhotos('inicio_hero')
+  const { photos: heroPhotos, loading: heroLoading } = usePhotos('inicio_hero')
   const { photos: destacados } = usePhotos('inicio_destacados')
   const heroTitulo = useContent('inicio_hero_titulo', textDefaults.inicio_hero_titulo)
   const heroTexto = useContent('inicio_hero_texto', textDefaults.inicio_hero_texto)
@@ -82,20 +82,17 @@ export default function Inicio() {
           {/* Hero image */}
           <div className="md:col-span-7">
             <div className="aspect-[4/5] md:aspect-auto md:h-[540px] overflow-hidden border border-on-tertiary-container/30 bg-surface-container-high relative">
-              {heroImg ? (
-                <img
-                  className="w-full h-full object-cover"
-                  alt={`Arreglo floral artesanal de ${site.name}`}
-                  src={heroImg}
-                  width="800"
-                  height="1000"
-                  loading="eager"
-                  fetchpriority="high"
-                  decoding="async"
-                />
-              ) : (
-                <EmptyPhoto />
-              )}
+              <SmartImage
+                className="w-full h-full object-cover"
+                alt={`Arreglo floral artesanal de ${site.name}`}
+                src={heroImg}
+                pending={heroLoading}
+                width="800"
+                height="1000"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+              />
               {heroImg && (
                 <div className="absolute bottom-5 right-5 bg-surface/90 border border-on-tertiary-container px-5 py-3">
                   <p className="text-xs uppercase tracking-widest text-primary">Colección viva</p>
@@ -128,7 +125,7 @@ export default function Inicio() {
             {featured.map((item, i) => (
               <Link to="/colecciones" key={item.title || i} className="group cursor-pointer block">
                 <div className="aspect-[4/5] overflow-hidden bg-surface-container-high mb-5">
-                  <img
+                  <SmartImage
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt={item.alt}
                     src={item.img}

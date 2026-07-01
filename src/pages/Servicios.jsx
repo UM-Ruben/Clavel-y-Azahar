@@ -5,6 +5,7 @@ import { usePhotos, firstPhotoUrl, useContent, useEvents } from '../lib/content'
 import { textDefaults, subscriptionsDefault } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyPhoto from '../components/EmptyPhoto'
+import SmartImage from '../components/SmartImage'
 
 // Imágenes por defecto de las secciones (se usan si la dueña no sube las
 // suyas), autoalojadas en /public/demo (ver nota en Inicio.jsx).
@@ -15,8 +16,8 @@ const SERVICIOS_TALLER_IMG = '/demo/servicios-taller.jpg'
 export default function Servicios() {
   const demoMode = useDemoMode()
   const { photos: heroDb } = usePhotos('servicios_hero')
-  const { photos: bodasDb } = usePhotos('servicios_bodas')
-  const { photos: tallerDb } = usePhotos('servicios_taller')
+  const { photos: bodasDb, loading: bodasLoading } = usePhotos('servicios_bodas')
+  const { photos: tallerDb, loading: tallerLoading } = usePhotos('servicios_taller')
   const heroImg = firstPhotoUrl(heroDb, SERVICIOS_HERO_IMG, demoMode)
   const bodasImg = firstPhotoUrl(bodasDb, SERVICIOS_BODAS_IMG, demoMode)
   const tallerImg = firstPhotoUrl(tallerDb, SERVICIOS_TALLER_IMG, demoMode)
@@ -109,21 +110,20 @@ export default function Servicios() {
           </div>
           {/* Image */}
           <div className="md:col-span-7 order-1 md:order-2 mb-10 md:mb-0">
-            {bodasImg ? (
-              <img
-                alt="Decoración floral para mesa de banquete de boda"
-                className="w-full h-auto aspect-[4/5] object-cover"
-                src={bodasImg}
-                width="800"
-                height="1000"
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <div className="w-full aspect-[4/5]">
-                <EmptyPhoto />
-              </div>
-            )}
+            <SmartImage
+              alt="Decoración floral para mesa de banquete de boda"
+              className="w-full h-auto aspect-[4/5] object-cover"
+              src={bodasImg}
+              width="800"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+              fallback={
+                <div className="w-full aspect-[4/5]">
+                  <EmptyPhoto loading={bodasLoading} />
+                </div>
+              }
+            />
           </div>
         </div>
       </section>
@@ -191,21 +191,20 @@ export default function Servicios() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
           {/* Image */}
           <div className="md:col-span-6 mb-10 md:mb-0">
-            {tallerImg ? (
-              <img
-                alt="Taller de arte floral en nuestro estudio"
-                className="w-full h-auto aspect-square object-cover"
-                src={tallerImg}
-                width="800"
-                height="800"
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <div className="w-full aspect-square">
-                <EmptyPhoto />
-              </div>
-            )}
+            <SmartImage
+              alt="Taller de arte floral en nuestro estudio"
+              className="w-full h-auto aspect-square object-cover"
+              src={tallerImg}
+              width="800"
+              height="800"
+              loading="lazy"
+              decoding="async"
+              fallback={
+                <div className="w-full aspect-square">
+                  <EmptyPhoto loading={tallerLoading} />
+                </div>
+              }
+            />
           </div>
           {/* Text */}
           <div className="md:col-span-5 md:col-start-8">
