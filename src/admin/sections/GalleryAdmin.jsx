@@ -60,6 +60,7 @@ function SectionEditor({ section }) {
   const [photos, setPhotos] = useState(null)
   const [confirm, setConfirm] = useState(null) // foto a borrar
   const [busy, setBusy] = useState(false)
+  const [pendingPreview, setPendingPreview] = useState(null) // foto elegida sin subir aún
 
   async function load() {
     try {
@@ -154,6 +155,7 @@ function SectionEditor({ section }) {
                   folder={section.key}
                   currentUrl={photos[0]?.image_url || null}
                   onUploaded={handleUploaded}
+                  onPending={setPendingPreview}
                   label={photos.length ? 'Cambiar foto' : 'Subir foto'}
                   aspect={section.aspect}
                 />
@@ -173,7 +175,7 @@ function SectionEditor({ section }) {
                   </>
                 )}
               </div>
-              <SectionPreview sectionKey={section.key} page={section.group} imageUrl={photos[0]?.image_url || null} />
+              <SectionPreview sectionKey={section.key} page={section.group} imageUrl={pendingPreview || photos[0]?.image_url || null} />
             </div>
           ) : (
             <>

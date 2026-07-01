@@ -5,7 +5,7 @@
 // antes de sustituirla (esa sí es irreversible: el archivo antiguo se borra
 // del almacenamiento). Comprime en el navegador (src/lib/image.js), sube al
 // bucket «media» y devuelve { url, path } al padre vía onUploaded.
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Cropper from 'react-easy-crop'
 import { supabase, MEDIA_BUCKET } from '../../lib/supabase'
 import { processImage, uniqueName } from '../../lib/image'
@@ -16,6 +16,7 @@ export default function ImageUploader({
   folder = 'general',
   currentUrl = null,
   onUploaded,
+  onPending,
   label = 'Subir foto',
   aspect = 4 / 3,
 }) {
@@ -31,6 +32,14 @@ export default function ImageUploader({
   const [zoom, setZoom] = useState(1)
   const [cropPixels, setCropPixels] = useState(null)
   const [confirmReplace, setConfirmReplace] = useState(false)
+
+  // Avisa al padre de la imagen que se está eligiendo/recortando (aún sin subir)
+  // para que la vista previa «Así se ve en la web» la muestre en el momento, sin
+  // esperar a que se suba. Al cancelar o tras subir, `pending` vuelve a null.
+  useEffect(() => {
+    onPending?.(pending?.url ?? null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pending])
 
   function pickFile(file) {
     if (!file) return
