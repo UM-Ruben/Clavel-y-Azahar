@@ -31,23 +31,24 @@ export const textDefaults = {
 }
 
 // Tarjetas de suscripción (estructura). Se editan como bloque en el panel.
+// Imágenes autoalojadas en /public/demo (ver nota en Inicio.jsx).
 export const subscriptionsDefault = [
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCM-KcP34i_z7jDnkWKhGfqTo0SBWMZWLmhub05cQPaVv29FPwNvYaftWiKyUA9wZwjLF8CyG68YVFvven9bE5XjxoJoMVgK9KxvEg8iV1ax0so6iX28xsngxSOKn-mtYcJxml3Ygpz4eKQdYdhpWuvrW2mUTY4QxKeqUlXizYDDAjVU93pXEKS17RVhwN3e3qQozhavHiAJoyWNmL_qTa55LCpFiZQrwfUxfdo3seQsVzN8fFNyjEHwoDwyLdfKE1BsNID5IIyXqE',
+    img: '/demo/suscripcion-esencial.jpg',
     title: 'Esencial',
     freq: 'ENTREGA SEMANAL',
     desc: 'Una cuidada selección de flores frescas de temporada de una sola variedad envueltas en papel kraft, listas para tu florero favorito.',
     featured: false,
   },
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDYd6-yfYg_EsE4euWsnhWwtl0yvzL5RAH4ipktravM82lTFCszUmiCdi10pR2rUTH8efQo2AM_p8Nkv7ozgi9Mx1BKSu_XhpsKvEjrsjp1YMi0d1AZJ9-KF95y8s8GFm5AxW9uPGr5lzGifYVZ-7chPjuCbbr_kKHDu2eVmGpMl3rkLT8blQ1T2X_QtIQHXTEr5XfBykqRNKczMia5Yp-U-nm2VO9w60vHRBcPCMyN-hGyR7k3A7wv_yQPLUAxgXYkrAFJHbs9qcw',
+    img: '/demo/suscripcion-clasico.jpg',
     title: 'Clásico',
     freq: 'ENTREGA QUINCENAL',
     desc: 'Un arreglo exuberante y personalizado que combina flores principales premium y follaje texturizado, entregado en una vasija de cerámica.',
     featured: true,
   },
   {
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBDi-ZhQwGW-j_ta_nteWYIbP-cIOfcIYCy0O96xweHx-caJmdzZgZ6pfVle2jJ95p7W8reAvDn5AkSmtkensBavEaoafG9GfnETFp-pMYQUFfDs9GRQw7wOA1kZH2QHSoo_O0IEtNPLFKsX4cAMwB8i0TRxQJfw2LafsmgAo1R-L-wS7yAlIWNKGbyrBf_QPs-tcMKt6D5tScQmQWNa0aHxR2_CEOUqvYbuz1TWPugxro42AcfIYnrq4ZuJ4-aECSIp_4GxGsuVZc',
+    img: '/demo/suscripcion-gran-estilo.jpg',
     title: 'Gran Estilo',
     freq: 'ENTREGA MENSUAL',
     desc: 'Nuestra propuesta más espectacular. Una pieza escultórica de gran tamaño diseñada para ser el centro de atención de cualquier recibidor o salón espacioso.',

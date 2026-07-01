@@ -75,8 +75,13 @@ Tiempo estimado: **15 minutos**, una sola vez.
 ## Cómo usa el panel la dueña
 
 - **Galería**: elige una zona de la web (cabeceras, destacados, colecciones…) y
-  sube, ordena o borra fotos. Si una colección se queda sin fotos, la web muestra
-  las de ejemplo automáticamente (nunca se ve un hueco vacío).
+  sube, ordena o borra fotos. Al elegir una foto se puede recortar antes de
+  subirla (para que encaje bien) y hay que confirmar; si ya había una foto
+  publicada, se pide confirmar de nuevo porque se pierde y no se puede
+  deshacer. Si una colección se queda sin fotos, esa parte de la web muestra un
+  hueco neutro, nunca una foto de mentira (para ver el diseño ya «relleno» de
+  fotos de ejemplo, arranca `pnpm dev` y entra en `/demo` — esa vista no existe
+  en la web publicada).
 - **Eventos**: crea talleres y fechas especiales con foto, fecha y descripción.
   Los eventos pasados desaparecen solos de la web.
 - **Textos**: cambia títulos y descripciones de las páginas. Si deja un campo

@@ -91,21 +91,28 @@ export function usePhotos(category) {
 }
 
 // Normaliza las filas de la BD a la forma que esperan las páginas
-// ({ img, alt, badge, title, desc }) o, si no hay, devuelve el array por defecto.
-export function photosOr(dbPhotos, fallback) {
-  if (!dbPhotos || dbPhotos.length === 0) return fallback
-  return dbPhotos.map((p) => ({
-    img: p.image_url,
-    alt: p.alt || p.title || '',
-    badge: p.badge || null,
-    title: p.title || '',
-    desc: p.description || '',
-  }))
+// ({ img, alt, badge, title, desc }). Si no hay fotos reales, solo se usa el
+// array de ejemplo en modo demo (ver src/lib/demoMode.jsx); en la web real
+// devuelve un array vacío, para que la página muestre un hueco neutro en vez
+// de fotos de mentira.
+export function photosOr(dbPhotos, fallback, demoMode = false) {
+  if (dbPhotos && dbPhotos.length > 0) {
+    return dbPhotos.map((p) => ({
+      img: p.image_url,
+      alt: p.alt || p.title || '',
+      badge: p.badge || null,
+      title: p.title || '',
+      desc: p.description || '',
+    }))
+  }
+  return demoMode ? fallback : []
 }
 
-// URL de la primera foto de una categoría (huecos de 1 sola imagen).
-export function firstPhotoUrl(dbPhotos, fallbackUrl) {
-  return dbPhotos && dbPhotos.length > 0 ? dbPhotos[0].image_url : fallbackUrl
+// URL de la primera foto de una categoría (huecos de 1 sola imagen). Sin
+// fotos reales y fuera de modo demo, devuelve `null` (hueco neutro).
+export function firstPhotoUrl(dbPhotos, fallbackUrl, demoMode = false) {
+  if (dbPhotos && dbPhotos.length > 0) return dbPhotos[0].image_url
+  return demoMode ? fallbackUrl : null
 }
 
 // ---- Eventos próximos (no caducados) ---------------------------------------

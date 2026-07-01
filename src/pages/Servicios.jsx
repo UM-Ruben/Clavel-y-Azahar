@@ -3,19 +3,23 @@ import { site } from '../config/site'
 import Seo from '../components/Seo'
 import { usePhotos, firstPhotoUrl, useContent, useEvents } from '../lib/content'
 import { textDefaults, subscriptionsDefault } from '../lib/textDefaults'
+import { useDemoMode } from '../lib/demoMode'
+import EmptyPhoto from '../components/EmptyPhoto'
 
-// Imágenes por defecto de las secciones (se usan si la dueña no sube las suyas).
-const SERVICIOS_HERO_IMG =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBPLY2_-qiBRDnXH5lGAaecWZXMmHrVeOVnohRacBAtcq1N6RbD1b8xInP65wVIrsR8MlyqK24FwtTPv5aDmTPL1Sqz2nuMXI-SYRerGdfqQJmDZUmoz98DUoFDpMJcCEJ1VZ9POSUmG7mhCYEwpQIDN6NNDCeirRmmKW6WsxEpXWSrJ0rR46YPj5MdS4EX0MGHMSVT_yZnlyCscPP38n0kxmcvQcCUpcuqeHyB9dkPvB-mbdAPzxuFDMeUSnTbGrDrmWmazr91QXc'
-const SERVICIOS_BODAS_IMG =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBE__Xm1eFzB5YrwxibImh_PP6RlLmafxIr-BY-PjrW0HL9xCO_nBgwoST9rWnLJJonCEMg_kF86dhsGTGPH-W1T2dt5dajJJTjB91CJ4RPR3t5mMJWCPitES6V8Qtv4qENZFfwVbfajHnxSrO1rGr6XnHtMlt9p9LiGSpoX9CG6FMlL-iKbRbU0_iXq9HwRGt7uYMQR38s7nhFVugoWn3BZfb4vNOWCy78B61QfZHoIjBH1BAr3pgWHM3-NNhpA4uM86ESiD_qhHk'
-const SERVICIOS_TALLER_IMG =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCoQCDSPnc-KJx1DrdprOhMxT81hOef8fd30ZrIqa2MQNrhFQ99TDBR3Yp3s55afIdSgPLoWthRePVWzkM7sPrJPHqb_GRNaprSnVxnRJS1Kjc2-_ihBvSAuYkKCSaxM_KMmqFaSEfj2kYOiPmq58T4bghKQrjMN3oZ7BtZsj3Pr92wmx4n_DUb-qU_VSZplmC8FsMySwQlWSnRCvagVEdM76q-H_FTBdmw1cYYvJFW1_pgMLjzlK7mdvSb20aM96nYSghW_nhy6nw'
+// Imágenes por defecto de las secciones (se usan si la dueña no sube las
+// suyas), autoalojadas en /public/demo (ver nota en Inicio.jsx).
+const SERVICIOS_HERO_IMG = '/demo/servicios-hero.jpg'
+const SERVICIOS_BODAS_IMG = '/demo/servicios-bodas.jpg'
+const SERVICIOS_TALLER_IMG = '/demo/servicios-taller.jpg'
 
 export default function Servicios() {
+  const demoMode = useDemoMode()
   const { photos: heroDb } = usePhotos('servicios_hero')
   const { photos: bodasDb } = usePhotos('servicios_bodas')
   const { photos: tallerDb } = usePhotos('servicios_taller')
+  const heroImg = firstPhotoUrl(heroDb, SERVICIOS_HERO_IMG, demoMode)
+  const bodasImg = firstPhotoUrl(bodasDb, SERVICIOS_BODAS_IMG, demoMode)
+  const tallerImg = firstPhotoUrl(tallerDb, SERVICIOS_TALLER_IMG, demoMode)
   const heroTitulo = useContent('servicios_hero_titulo', textDefaults.servicios_hero_titulo)
   const heroTexto = useContent('servicios_hero_texto', textDefaults.servicios_hero_texto)
   const bodasTexto = useContent('servicios_bodas_texto', textDefaults.servicios_bodas_texto)
@@ -38,11 +42,11 @@ export default function Servicios() {
           {/* Background */}
           <div
             className="absolute inset-0 bg-surface-container-high"
-            style={{
-              backgroundImage: `url('${firstPhotoUrl(heroDb, SERVICIOS_HERO_IMG)}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
+            style={
+              heroImg
+                ? { backgroundImage: `url('${heroImg}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                : undefined
+            }
           />
           {/* Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/60 to-transparent" />
@@ -105,15 +109,21 @@ export default function Servicios() {
           </div>
           {/* Image */}
           <div className="md:col-span-7 order-1 md:order-2 mb-10 md:mb-0">
-            <img
-              alt="Decoración floral para mesa de banquete de boda"
-              className="w-full h-auto aspect-[4/5] object-cover"
-              src={firstPhotoUrl(bodasDb, SERVICIOS_BODAS_IMG)}
-              width="800"
-              height="1000"
-              loading="lazy"
-              decoding="async"
-            />
+            {bodasImg ? (
+              <img
+                alt="Decoración floral para mesa de banquete de boda"
+                className="w-full h-auto aspect-[4/5] object-cover"
+                src={bodasImg}
+                width="800"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div className="w-full aspect-[4/5]">
+                <EmptyPhoto />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -181,15 +191,21 @@ export default function Servicios() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
           {/* Image */}
           <div className="md:col-span-6 mb-10 md:mb-0">
-            <img
-              alt="Taller de arte floral en nuestro estudio"
-              className="w-full h-auto aspect-square object-cover"
-              src={firstPhotoUrl(tallerDb, SERVICIOS_TALLER_IMG)}
-              width="800"
-              height="800"
-              loading="lazy"
-              decoding="async"
-            />
+            {tallerImg ? (
+              <img
+                alt="Taller de arte floral en nuestro estudio"
+                className="w-full h-auto aspect-square object-cover"
+                src={tallerImg}
+                width="800"
+                height="800"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div className="w-full aspect-square">
+                <EmptyPhoto />
+              </div>
+            )}
           </div>
           {/* Text */}
           <div className="md:col-span-5 md:col-start-8">

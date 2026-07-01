@@ -13,16 +13,21 @@ const QUALITY = 0.82 // calidad JPEG (0–1)
 
 // Reduce y comprime un File de imagen. Devuelve un Blob JPEG listo para subir.
 // Si algo falla (formato raro, etc.), devuelve el archivo original sin tocar.
-export async function processImage(file) {
+// `cropPixels` (opcional) es el recorte elegido por la dueña, en píxeles de la
+// imagen original: { x, y, width, height }. Sin él, se usa la imagen entera.
+export async function processImage(file, cropPixels) {
   try {
     const bitmap = await loadBitmap(file)
-    const { width, height } = fit(bitmap.width, bitmap.height, MAX_SIDE)
+    const src = cropPixels
+      ? { x: cropPixels.x, y: cropPixels.y, w: cropPixels.width, h: cropPixels.height }
+      : { x: 0, y: 0, w: bitmap.width, h: bitmap.height }
+    const { width, height } = fit(src.w, src.h, MAX_SIDE)
 
     const canvas = document.createElement('canvas')
     canvas.width = width
     canvas.height = height
     const ctx = canvas.getContext('2d')
-    ctx.drawImage(bitmap, 0, 0, width, height)
+    ctx.drawImage(bitmap, src.x, src.y, src.w, src.h, 0, 0, width, height)
     if (bitmap.close) bitmap.close()
 
     const blob = await new Promise((resolve) =>

@@ -8,6 +8,7 @@ import Servicios from './pages/Servicios'
 import Contacto from './pages/Contacto'
 import Eventos from './pages/Eventos'
 import AdminRoute from './admin/AdminRoute'
+import DemoLayout from './pages/demo/DemoLayout'
 
 function Layout() {
   return (
@@ -45,4 +46,23 @@ export const routes = [
     element: <AdminRoute />,
     entry: 'src/admin/AdminRoute.jsx',
   },
+  // Vista de demostración: las mismas páginas, pero con fotos de ejemplo
+  // (modo demo, ver src/lib/demoMode.jsx). Solo se registra en desarrollo
+  // (`import.meta.env.DEV`), así que el build de producción ni la genera ni
+  // la incluye en el bundle — no existe en la web publicada.
+  ...(import.meta.env.DEV
+    ? [
+        {
+          path: '/demo',
+          element: <DemoLayout />,
+          entry: 'src/pages/demo/DemoLayout.jsx',
+          children: [
+            { index: true, element: <Inicio /> },
+            { path: 'colecciones', element: <Colecciones /> },
+            { path: 'servicios', element: <Servicios /> },
+            { path: 'contacto', element: <Contacto /> },
+          ],
+        },
+      ]
+    : []),
 ]

@@ -2,13 +2,17 @@ import { useState } from 'react'
 import Seo from '../components/Seo'
 import { useBusiness, usePhotos, firstPhotoUrl, useContent } from '../lib/content'
 import { textDefaults } from '../lib/textDefaults'
+import { useDemoMode } from '../lib/demoMode'
+import EmptyPhoto from '../components/EmptyPhoto'
 
-const CONTACTO_LOCAL_IMG =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDPdFONLo-6R-Lc6wU2qmB18VhAXOjrN5TVDTgqtkGq6VS9rDplfpZKcmgKn_8ie4bLYFfZsl-lpJf0NfFXj8MGhQY-8RUBFfenDivGl8x7foAZqx1S19duBfO9WmxCMAbtICu9V8KryiSMLLAp4_Vo1HQ1lEYdZaHkJeJcdNJ4M5yQAyqD1Hc5Bc9_vB2L_29cZQ71NXPvAOBKlDkSQewJHbxtV6ZcNmNUlNV_4uKzmwSOZOvZL9Obijid-luQZGcMy6D_vV2kURI'
+// Autoalojada en /public/demo (ver nota en Inicio.jsx).
+const CONTACTO_LOCAL_IMG = '/demo/contacto-local.jpg'
 
 export default function Contacto() {
+  const demoMode = useDemoMode()
   const b = useBusiness()
   const { photos: localDb } = usePhotos('contacto_local')
+  const localImg = firstPhotoUrl(localDb, CONTACTO_LOCAL_IMG, demoMode)
   const intro = useContent('contacto_intro', textDefaults.contacto_intro)
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '', website: '' })
@@ -181,15 +185,19 @@ export default function Contacto() {
             aria-label={`Cómo llegar a ${b.name} en Google Maps`}
             className="relative block w-full h-[400px] md:h-[500px] bg-surface-container overflow-hidden group focus-visible:outline-2"
           >
-            <img
-              alt={`Fachada de ${b.name} en ${b.address.district}, ${b.address.city}`}
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              src={firstPhotoUrl(localDb, CONTACTO_LOCAL_IMG)}
-              width="800"
-              height="600"
-              loading="lazy"
-              decoding="async"
-            />
+            {localImg ? (
+              <img
+                alt={`Fachada de ${b.name} en ${b.address.district}, ${b.address.city}`}
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                src={localImg}
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <EmptyPhoto />
+            )}
             <div className="absolute inset-0 border border-on-tertiary-container/20 pointer-events-none" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 drop-shadow-md">
               <div className="bg-surface rounded-full p-3 shadow-lg border border-outline-variant/20 flex items-center justify-center">
