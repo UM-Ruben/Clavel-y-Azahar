@@ -27,14 +27,19 @@ Tiempo estimado: **15 minutos**, una sola vez.
 3. Pulsa **Run**. Debe decir «Success». (Puedes ejecutarlo más de una vez sin
    problema.) Esto crea las tablas, el almacén de fotos y las reglas de seguridad.
 
-## 3. Crear la usuaria de la dueña
+## 3. Crear la única cuenta de acceso
 
 1. Menú lateral → **Authentication** → **Users** → **Add user** → **Create new user**.
-2. Pon el **email** de la dueña y una **contraseña** inicial. Marca «Auto confirm
-   user» si aparece. Crea el usuario.
-3. **Importante (seguridad):** ve a **Authentication** → **Providers** (o
+2. Pon un **email** y una **contraseña** inicial. Marca «Auto confirm user» si
+   aparece. Crea el usuario.
+   - **No hace falta el correo privado de la dueña.** Ese email es solo el
+     *usuario* con el que se entra al panel y el buzón donde llegaría el correo de
+     «recuperar contraseña»; no se muestra en ninguna parte pública. **Usa el
+     correo de la tienda** (cualquier buzón que controléis vosotros).
+3. **Crea SOLO este usuario.** No añadas ninguno más: así ella es la única cuenta.
+4. **Importante (seguridad):** ve a **Authentication** → **Providers** (o
    **Sign In / Providers**) → **Email** y **desactiva** «Allow new users to sign up».
-   Así nadie más puede registrarse: solo entra quien tú crees aquí.
+   Así nadie puede registrarse por su cuenta y queda **una sola cuenta**.
 
 ## 4. Copiar las claves de conexión
 
