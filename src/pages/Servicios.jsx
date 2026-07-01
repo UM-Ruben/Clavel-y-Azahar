@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { site } from '../config/site'
 import Seo from '../components/Seo'
-import { usePhotos, firstPhotoUrl, useContent, useEvents } from '../lib/content'
+import { usePhotos, firstPhotoUrl, firstPhotoAlt, useContent, useEvents } from '../lib/content'
 import { textDefaults, subscriptionsDefault } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyPhoto from '../components/EmptyPhoto'
@@ -21,6 +21,9 @@ export default function Servicios() {
   const heroImg = firstPhotoUrl(heroDb, SERVICIOS_HERO_IMG, demoMode)
   const bodasImg = firstPhotoUrl(bodasDb, SERVICIOS_BODAS_IMG, demoMode)
   const tallerImg = firstPhotoUrl(tallerDb, SERVICIOS_TALLER_IMG, demoMode)
+  const heroAlt = firstPhotoAlt(heroDb, 'Instalación floral para bodas y eventos', demoMode)
+  const bodasAlt = firstPhotoAlt(bodasDb, 'Decoración floral para mesa de banquete de boda', demoMode)
+  const tallerAlt = firstPhotoAlt(tallerDb, 'Taller de arte floral en nuestro estudio', demoMode)
   const heroTitulo = useContent('servicios_hero_titulo', textDefaults.servicios_hero_titulo)
   const heroTexto = useContent('servicios_hero_texto', textDefaults.servicios_hero_texto)
   const bodasTexto = useContent('servicios_bodas_texto', textDefaults.servicios_bodas_texto)
@@ -40,9 +43,13 @@ export default function Servicios() {
       {/* Hero */}
       <section className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-section-gap">
         <div className="relative w-full h-[716px] min-h-[500px] flex items-end pb-12 px-8 md:px-16 overflow-hidden">
-          {/* Background */}
+          {/* Background. Es una imagen de fondo (no <img>), así que para que el
+              texto alternativo cuente para accesibilidad se expone con
+              role="img" + aria-label cuando hay foto. */}
           <div
             className="absolute inset-0 bg-surface-container-high"
+            role={heroImg ? 'img' : undefined}
+            aria-label={heroImg ? heroAlt : undefined}
             style={
               heroImg
                 ? { backgroundImage: `url('${heroImg}')`, backgroundSize: 'cover', backgroundPosition: 'center' }
@@ -111,7 +118,7 @@ export default function Servicios() {
           {/* Image */}
           <div className="md:col-span-7 order-1 md:order-2 mb-10 md:mb-0">
             <SmartImage
-              alt="Decoración floral para mesa de banquete de boda"
+              alt={bodasAlt}
               className="w-full h-auto aspect-[4/5] object-cover"
               src={bodasImg}
               width="800"
@@ -192,7 +199,7 @@ export default function Servicios() {
           {/* Image */}
           <div className="md:col-span-6 mb-10 md:mb-0">
             <SmartImage
-              alt="Taller de arte floral en nuestro estudio"
+              alt={tallerAlt}
               className="w-full h-auto aspect-square object-cover"
               src={tallerImg}
               width="800"

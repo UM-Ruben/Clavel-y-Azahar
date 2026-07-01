@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { site } from '../config/site'
 import Seo from '../components/Seo'
-import { usePhotos, photosOr, firstPhotoUrl, useContent } from '../lib/content'
+import { usePhotos, photosOr, firstPhotoUrl, firstPhotoAlt, useContent } from '../lib/content'
 import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyGallery from '../components/EmptyGallery'
@@ -42,6 +42,7 @@ export default function Inicio() {
   const heroTitulo = useContent('inicio_hero_titulo', textDefaults.inicio_hero_titulo)
   const heroTexto = useContent('inicio_hero_texto', textDefaults.inicio_hero_texto)
   const heroImg = firstPhotoUrl(heroPhotos, INICIO_HERO_IMG, demoMode)
+  const heroAlt = firstPhotoAlt(heroPhotos, `Arreglo floral artesanal de ${site.name}`, demoMode)
   const featured = photosOr(destacados, featuredDefault, demoMode)
 
   return (
@@ -84,7 +85,7 @@ export default function Inicio() {
             <div className="aspect-[4/5] md:aspect-auto md:h-[540px] overflow-hidden border border-on-tertiary-container/30 bg-surface-container-high relative">
               <SmartImage
                 className="w-full h-full object-cover"
-                alt={`Arreglo floral artesanal de ${site.name}`}
+                alt={heroAlt}
                 src={heroImg}
                 pending={heroLoading}
                 width="800"

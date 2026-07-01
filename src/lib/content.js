@@ -124,6 +124,17 @@ export function firstPhotoUrl(dbPhotos, fallbackUrl, demoMode = false) {
   return null
 }
 
+// Texto alternativo (alt) de la primera foto de una categoría, para los huecos
+// de 1 sola imagen. Usa el que haya escrito la dueña en el panel; si no lo ha
+// puesto (o en modo demo, o si no hay foto), cae al alt por defecto de la página
+// —así el `alt` nunca queda vacío (bien para Google y accesibilidad).
+export function firstPhotoAlt(dbPhotos, fallbackAlt, demoMode = false) {
+  if (!demoMode && dbPhotos && dbPhotos.length > 0 && dbPhotos[0].alt) {
+    return dbPhotos[0].alt
+  }
+  return fallbackAlt
+}
+
 // ---- Eventos próximos (no caducados) ---------------------------------------
 export function useEvents() {
   const { data, loading } = useQuery('events:upcoming', () =>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Seo from '../components/Seo'
-import { useBusiness, usePhotos, firstPhotoUrl, useContent } from '../lib/content'
+import { useBusiness, usePhotos, firstPhotoUrl, firstPhotoAlt, useContent } from '../lib/content'
 import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import SmartImage from '../components/SmartImage'
@@ -13,6 +13,7 @@ export default function Contacto() {
   const b = useBusiness()
   const { photos: localDb, loading: localLoading } = usePhotos('contacto_local')
   const localImg = firstPhotoUrl(localDb, CONTACTO_LOCAL_IMG, demoMode)
+  const localAlt = firstPhotoAlt(localDb, `Fachada de ${b.name} en ${b.address.district}, ${b.address.city}`, demoMode)
   const intro = useContent('contacto_intro', textDefaults.contacto_intro)
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '', website: '' })
@@ -186,7 +187,7 @@ export default function Contacto() {
             className="relative block w-full h-[400px] md:h-[500px] bg-surface-container overflow-hidden group focus-visible:outline-2"
           >
             <SmartImage
-              alt={`Fachada de ${b.name} en ${b.address.district}, ${b.address.city}`}
+              alt={localAlt}
               className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
               src={localImg}
               pending={localLoading}
