@@ -189,6 +189,7 @@ function EventForm({ event, onCancel, onSave, busy }) {
               folder="eventos"
               currentUrl={form.image_url || null}
               label=""
+              aspect={4 / 3}
               onUploaded={({ url, path }) => setForm((f) => ({ ...f, image_url: url, image_path: path }))}
             />
           </div>

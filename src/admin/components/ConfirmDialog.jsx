@@ -5,6 +5,7 @@ export default function ConfirmDialog({
   title = '¿Estás segura?',
   message,
   confirmLabel = 'Sí, borrar',
+  busyLabel = 'Borrando…',
   cancelLabel = 'Cancelar',
   onConfirm,
   onCancel,
@@ -39,7 +40,7 @@ export default function ConfirmDialog({
             disabled={busy}
             className="px-5 py-2.5 rounded-lg bg-error text-on-error hover:opacity-90 transition-opacity text-sm font-semibold disabled:opacity-50"
           >
-            {busy ? 'Borrando…' : confirmLabel}
+            {busy ? busyLabel : confirmLabel}
           </button>
         </div>
       </div>

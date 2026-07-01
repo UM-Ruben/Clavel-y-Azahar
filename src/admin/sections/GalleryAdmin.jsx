@@ -1,7 +1,7 @@
 // Sección «Galería de fotos» del panel. Permite a la dueña elegir una zona de
 // la web (cabeceras, destacados, colecciones…) y subir, editar, reordenar y
-// borrar sus fotos. Si una zona se queda sin fotos, la web muestra las de
-// ejemplo automáticamente (nunca se ve un hueco vacío).
+// borrar sus fotos. Si una zona se queda sin fotos, la web real muestra un
+// hueco neutro (nunca fotos de mentira) — ver src/lib/demoMode.jsx.
 import { useEffect, useMemo, useState } from 'react'
 import { GALLERY_SECTIONS, FIELD_LABELS } from '../galleryConfig'
 import { listPhotos, addPhoto, updatePhoto, deletePhoto, swapPhotoOrder } from '../db'
@@ -133,7 +133,7 @@ function SectionEditor({ section }) {
         {section.help && <p className="font-body-md text-sm text-on-surface-variant mt-1">{section.help}</p>}
         {!section.single && (
           <p className="font-body-md text-sm text-on-surface-variant mt-1">
-            Si borras todas las fotos, la web mostrará las de ejemplo.
+            Si borras todas las fotos, esta sección se ocultará en la web hasta que subas alguna.
           </p>
         )}
       </header>
@@ -150,6 +150,7 @@ function SectionEditor({ section }) {
                   currentUrl={photos[0]?.image_url || null}
                   onUploaded={handleUploaded}
                   label={photos.length ? 'Cambiar foto' : 'Subir foto'}
+                  aspect={section.aspect}
                 />
                 {photos[0] && (
                   <div className="mt-4">
@@ -194,7 +195,13 @@ function SectionEditor({ section }) {
 
               {showUploader && (
                 <div className="max-w-md">
-                  <ImageUploader key={photos.length} folder={section.key} onUploaded={handleUploaded} label="Añadir foto" />
+                  <ImageUploader
+                    key={photos.length}
+                    folder={section.key}
+                    onUploaded={handleUploaded}
+                    label="Añadir foto"
+                    aspect={section.aspect}
+                  />
                 </div>
               )}
             </>
