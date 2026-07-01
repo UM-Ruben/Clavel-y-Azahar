@@ -24,10 +24,10 @@ export default function GalleryAdmin() {
   const section = GALLERY_SECTIONS.find((s) => s.key === active)
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-[224px_1fr] gap-6">
       {/* Selector de sección */}
-      <aside className="lg:border-r lg:border-outline-variant lg:pr-6">
-        <nav className="flex flex-col gap-6">
+      <aside className="lg:border-r lg:border-outline-variant lg:pr-4">
+        <nav className="flex flex-col gap-5">
           {groups.map(([group, sections]) => (
             <div key={group}>
               <p className="font-label-sm text-label-sm text-on-tertiary-container uppercase tracking-wider mb-2">{group}</p>
@@ -36,7 +36,7 @@ export default function GalleryAdmin() {
                   <button
                     key={s.key}
                     onClick={() => setActive(s.key)}
-                    className={`text-left px-3 py-2 rounded-lg font-body-md text-sm transition-colors ${
+                    className={`text-left px-3 py-2 rounded-lg font-body-md text-sm leading-snug transition-colors ${
                       active === s.key ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:bg-surface-container'
                     }`}
                   >
@@ -92,6 +92,7 @@ function SectionEditor({ section }) {
     try {
       await updatePhoto(photo.id, fields, section.key)
       setPhotos((prev) => prev.map((p) => (p.id === photo.id ? { ...p, ...fields } : p)))
+      toast.ok('Cambios guardados.')
     } catch {
       toast.error('No se pudo guardar el cambio.')
     }
@@ -144,7 +145,7 @@ function SectionEditor({ section }) {
         <div className="space-y-6">
           {section.single ? (
             <div className="flex flex-col sm:flex-row gap-8">
-              <div className="max-w-md w-full">
+              <div className="max-w-[320px] w-full">
                 <ImageUploader
                   folder={section.key}
                   currentUrl={photos[0]?.image_url || null}
@@ -154,7 +155,7 @@ function SectionEditor({ section }) {
                 />
                 {photos[0] && (
                   <div className="mt-4">
-                    <PhotoFields photo={photos[0]} fields={section.fields} onChange={patch} />
+                    <PhotoFields key={photos[0].id} photo={photos[0]} fields={section.fields} onChange={patch} />
                   </div>
                 )}
               </div>
@@ -220,8 +221,33 @@ function SectionEditor({ section }) {
   )
 }
 
-// Campos editables de una foto (se guardan al salir del campo).
+// Campos editables de una foto. Los cambios NO se guardan solos: se escriben en
+// un borrador y solo se aplican al pulsar «Guardar cambios» (el botón se activa
+// únicamente cuando hay algo distinto de lo que ya está publicado).
 function PhotoFields({ photo, fields, onChange }) {
+  const savedValues = () => Object.fromEntries(fields.map((f) => [f, photo[mapField(f)] || '']))
+  const [draft, setDraft] = useState(savedValues)
+  const [saving, setSaving] = useState(false)
+  const setField = (f, v) => setDraft((d) => ({ ...d, [f]: v }))
+  const reset = () => setDraft(savedValues())
+
+  const dirty = fields.some((f) => draft[f] !== (photo[mapField(f)] || ''))
+
+  async function handleSave() {
+    const changed = {}
+    for (const f of fields) {
+      const col = mapField(f)
+      if ((photo[col] || '') !== draft[f]) changed[col] = draft[f]
+    }
+    if (!Object.keys(changed).length) return
+    setSaving(true)
+    try {
+      await onChange(photo, changed)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <div className="space-y-3">
       {fields.map((f) => (
@@ -229,21 +255,39 @@ function PhotoFields({ photo, fields, onChange }) {
           <span className="font-label-sm text-[11px] text-on-surface-variant uppercase tracking-wider">{FIELD_LABELS[f]}</span>
           {f === 'desc' ? (
             <textarea
-              defaultValue={photo[mapField(f)] || ''}
+              value={draft[f]}
               rows={2}
-              onBlur={(e) => maybeSave(photo, f, e.target.value, onChange)}
+              onChange={(e) => setField(f, e.target.value)}
               className="mt-1 w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm resize-none focus:border-primary focus:outline-none"
             />
           ) : (
             <input
               type="text"
-              defaultValue={photo[mapField(f)] || ''}
-              onBlur={(e) => maybeSave(photo, f, e.target.value, onChange)}
+              value={draft[f]}
+              onChange={(e) => setField(f, e.target.value)}
               className="mt-1 w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none"
             />
           )}
         </label>
       ))}
+      <div className="flex justify-end gap-2">
+        <button
+          type="button"
+          onClick={reset}
+          disabled={!dirty || saving}
+          className="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant text-sm font-semibold disabled:opacity-40 hover:bg-surface-container transition-colors"
+        >
+          Restablecer
+        </button>
+        <button
+          type="button"
+          onClick={handleSave}
+          disabled={!dirty || saving}
+          className="px-4 py-2 rounded-lg bg-primary text-on-primary text-sm font-semibold disabled:opacity-40 hover:bg-surface-tint transition-colors"
+        >
+          {saving ? 'Guardando…' : 'Guardar cambios'}
+        </button>
+      </div>
     </div>
   )
 }
@@ -251,11 +295,6 @@ function PhotoFields({ photo, fields, onChange }) {
 // El nombre de campo de la UI ('desc') -> columna de la BD ('description').
 function mapField(f) {
   return f === 'desc' ? 'description' : f
-}
-function maybeSave(photo, f, value, onChange) {
-  const col = mapField(f)
-  if ((photo[col] || '') === value) return
-  onChange(photo, { [col]: value })
 }
 
 function IconBtn({ children, label, onClick, disabled }) {
