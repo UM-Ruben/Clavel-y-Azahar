@@ -1,0 +1,15 @@
+project_id = "floristeria"
+
+[auth]
+enable_signup = false
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/admin", "http://127.0.0.1:5173/admin"]
+
+[auth.email]
+enable_signup = false
+
+[functions.publish-photo]
+verify_jwt = false
+
+[functions.cleanup-media]
+verify_jwt = false
