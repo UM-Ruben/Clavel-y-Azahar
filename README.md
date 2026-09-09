@@ -21,6 +21,8 @@ La web incluye un panel privado en **`/admin`** para que la dueña suba fotos, c
 eventos y edite textos y datos del negocio **sin tocar código**. La web pública
 sigue siendo estática y rápida; el contenido editable se carga de la base de datos
 y, si aún no hay nada, se muestran los valores de ejemplo (la web nunca se rompe).
+Las fotos se recortan para cada zona, aceptan HEIC de iPhone, se publican de forma
+atómica y conservan un historial recuperable durante 30 días.
 
 Para activarlo hay que conectar Supabase una sola vez (≈15 min). Pasos detallados
 en **[SETUP_PANEL.md](./SETUP_PANEL.md)**. El esquema de la base de datos está en
