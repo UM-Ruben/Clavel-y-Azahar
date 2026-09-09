@@ -42,7 +42,7 @@ export default function AdminApp() {
 }
 
 function AdminInner() {
-  const { session, ready, signIn, signOut, resetPassword } = useAuth()
+  const { session, ready, isOwner, recovery, authError, retry, signIn, signOut, resetPassword, updatePassword } = useAuth()
   const [tab, setTab] = useState('galeria')
 
   if (!ready) {
@@ -53,8 +53,38 @@ function AdminInner() {
     )
   }
 
+  if (authError) {
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-7 space-y-5">
+          <h1 className="font-headline text-2xl text-primary">No se pudo abrir el panel</h1>
+          <p role="alert" className="text-on-surface-variant">{authError}</p>
+          <div className="flex flex-wrap gap-3">
+            <button onClick={retry} className="min-h-11 px-5 rounded-lg bg-primary text-on-primary">Reintentar</button>
+            {session && <button onClick={signOut} className="min-h-11 px-5 border border-outline-variant rounded-lg">Cerrar sesión</button>}
+            <a href="/" className="min-h-11 px-3 inline-flex items-center text-primary underline">Volver a la web</a>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!session) {
     return <Login onSignIn={signIn} onReset={resetPassword} />
+  }
+
+  if (recovery) return <PasswordUpdate onUpdate={updatePassword} onCancel={signOut} />
+
+  if (!isOwner) {
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+        <div className="max-w-md rounded-xl border border-error/30 bg-error-container p-7 text-on-error-container">
+          <h1 className="font-headline text-2xl mb-3">Cuenta sin acceso</h1>
+          <p className="mb-6">Esta cuenta ha iniciado sesión, pero no es la cuenta propietaria configurada para el panel.</p>
+          <button type="button" onClick={signOut} className="min-h-11 px-5 rounded-lg bg-error text-on-error font-semibold">Cerrar sesión</button>
+        </div>
+      </div>
+    )
   }
 
   const Active = TABS.find((t) => t.key === tab).Component
@@ -104,6 +134,38 @@ function AdminInner() {
 
         <Active />
       </div>
+    </div>
+  )
+}
+
+function PasswordUpdate({ onUpdate, onCancel }) {
+  const [password, setPassword] = useState('')
+  const [repeat, setRepeat] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  async function submit(event) {
+    event.preventDefault()
+    if (password.length < 10) return setError('Usa al menos 10 caracteres.')
+    if (password !== repeat) return setError('Las contraseñas no coinciden.')
+    setBusy(true)
+    setError('')
+    try { await onUpdate(password) } catch { setError('No se pudo actualizar la contraseña. Solicita un enlace nuevo.') } finally { setBusy(false) }
+  }
+
+  return (
+    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+      <form onSubmit={submit} className="w-full max-w-sm bg-surface-container-lowest border border-outline-variant rounded-xl p-7 shadow-sm space-y-5">
+        <h1 className="font-headline text-3xl text-primary">Nueva contraseña</h1>
+        <p className="text-sm text-on-surface-variant">Elige una contraseña que no utilices en otros servicios.</p>
+        <label className="block"><span className="text-sm font-semibold">Contraseña nueva</span><input type="password" autoComplete="new-password" required value={password} onChange={(e) => setPassword(e.target.value)} className="admin-input mt-2" /></label>
+        <label className="block"><span className="text-sm font-semibold">Repetir contraseña</span><input type="password" autoComplete="new-password" required value={repeat} onChange={(e) => setRepeat(e.target.value)} className="admin-input mt-2" /></label>
+        {error && <p role="alert" className="text-sm text-error">{error}</p>}
+        <div className="flex gap-3">
+          <button type="submit" disabled={busy} className="min-h-11 flex-1 bg-primary text-on-primary rounded-lg font-semibold disabled:opacity-50">{busy ? 'Guardando…' : 'Guardar'}</button>
+          <button type="button" onClick={onCancel} disabled={busy} className="min-h-11 px-4 border border-outline-variant rounded-lg">Cancelar</button>
+        </div>
+      </form>
     </div>
   )
 }

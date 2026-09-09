@@ -32,3 +32,6 @@ export const supabase = isSupabaseConfigured
 
 // Nombre del bucket de Storage donde se guardan las fotos subidas desde el panel.
 export const MEDIA_BUCKET = 'media'
+export const ORIGINALS_BUCKET = 'media-originals'
+export const STAGING_BUCKET = 'media-staging'
+export const HISTORY_BUCKET = 'media-history'

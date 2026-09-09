@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { site } from '../config/site'
 import Seo from '../components/Seo'
@@ -6,6 +7,12 @@ import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyGallery from '../components/EmptyGallery'
 import SmartImage from '../components/SmartImage'
+import { getGallerySection } from '../config/gallery'
+
+const INITIAL_VISIBLE = getGallerySection('colecciones_temporada').initialVisible
+const TEMPORADA_ASPECT = getGallerySection('colecciones_temporada').aspect
+const CENTROS_ASPECT = getGallerySection('colecciones_centros').aspect
+const EXOTICAS_ASPECT = getGallerySection('colecciones_exoticas').aspect
 
 // Imágenes de ejemplo autoalojadas en /public/demo (ver nota en Inicio.jsx:
 // antes enlazaban a previsualizaciones internas de Google poco fiables).
@@ -64,6 +71,9 @@ const exoticas = [
 ]
 
 export default function Colecciones() {
+  const [visibleTemporada, setVisibleTemporada] = useState(INITIAL_VISIBLE)
+  const [visibleCentros, setVisibleCentros] = useState(INITIAL_VISIBLE)
+  const [visiblePlantas, setVisiblePlantas] = useState(INITIAL_VISIBLE)
   const demoMode = useDemoMode()
   const { photos: temporadaDb } = usePhotos('colecciones_temporada')
   const { photos: centrosDb } = usePhotos('colecciones_centros')
@@ -100,9 +110,9 @@ export default function Colecciones() {
           <EmptyGallery message="Muy pronto verás aquí los ramos de temporada." />
         ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-16">
-          {temporada.map((card, i) => (
+          {temporada.slice(0, visibleTemporada).map((card, i) => (
             <Link to="/contacto" key={card.title || i} className="group cursor-pointer block">
-              <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-low mb-6">
+              <div style={{ aspectRatio: String(TEMPORADA_ASPECT) }} className="relative aspect-[4/5] overflow-hidden bg-surface-container-low mb-6">
                 <SmartImage
                   alt={card.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -127,6 +137,7 @@ export default function Colecciones() {
           ))}
         </div>
         )}
+        <ShowMore visible={visibleTemporada} total={temporada.length} onClick={() => setVisibleTemporada((value) => value + INITIAL_VISIBLE)} />
       </section>
 
       {/* Centros de Mesa */}
@@ -139,12 +150,12 @@ export default function Colecciones() {
           <EmptyGallery message="Muy pronto verás aquí los centros de mesa." />
         ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-gutter gap-y-16">
-          {centros.map((c, i) => (
+          {centros.slice(0, visibleCentros).map((c, i) => (
             <div
               key={c.title || i}
               className="group flex flex-col md:flex-row gap-8 items-center bg-surface-container-low p-8 rounded-DEFAULT border-[0.5px] border-outline-variant hover:shadow-[0_8px_30px_rgba(6,27,14,0.05)] transition-all duration-300"
             >
-              <div className="relative w-full md:w-1/2 aspect-square overflow-hidden">
+              <div style={{ aspectRatio: String(CENTROS_ASPECT) }} className="relative w-full md:w-1/2 aspect-square overflow-hidden">
                 <SmartImage
                   alt={c.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -171,6 +182,7 @@ export default function Colecciones() {
           ))}
         </div>
         )}
+        <ShowMore visible={visibleCentros} total={centros.length} onClick={() => setVisibleCentros((value) => value + INITIAL_VISIBLE)} />
       </section>
 
       {/* Plantas Exóticas */}
@@ -179,10 +191,13 @@ export default function Colecciones() {
           Plantas Exóticas
           <span className="h-[0.5px] flex-grow bg-outline-variant" />
         </h2>
+        {plantas.length === 0 ? (
+          <EmptyGallery message="Muy pronto verás aquí nuestras plantas exóticas." />
+        ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-gutter gap-y-12">
-          {plantas.map((p, i) => (
+          {plantas.slice(0, visiblePlantas).map((p, i) => (
             <Link to="/contacto" key={p.title || i} className="group cursor-pointer text-center block">
-              <div className="relative aspect-square overflow-hidden rounded-full border border-outline-variant mb-6 mx-auto w-4/5">
+              <div style={{ aspectRatio: String(EXOTICAS_ASPECT) }} className="relative aspect-square overflow-hidden rounded-full border border-outline-variant mb-6 mx-auto w-4/5">
                 <SmartImage
                   alt={p.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -210,7 +225,21 @@ export default function Colecciones() {
             <p className="font-body-md text-body-md text-surface-tint">Consúltanos</p>
           </Link>
         </div>
+        )}
+        <ShowMore visible={visiblePlantas} total={plantas.length} onClick={() => setVisiblePlantas((value) => value + INITIAL_VISIBLE)} />
       </section>
+    </div>
+  )
+}
+
+function ShowMore({ visible, total, onClick }) {
+  if (visible >= total) return null
+  return (
+    <div className="flex justify-center mt-12">
+      <button type="button" onClick={onClick}
+        className="min-h-11 px-7 py-3 border border-primary text-primary font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary hover:text-on-primary transition-colors">
+        Ver más
+      </button>
     </div>
   )
 }

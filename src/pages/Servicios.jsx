@@ -6,12 +6,16 @@ import { textDefaults, subscriptionsDefault } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyPhoto from '../components/EmptyPhoto'
 import SmartImage from '../components/SmartImage'
+import { getGallerySection } from '../config/gallery'
 
 // Imágenes por defecto de las secciones (se usan si la dueña no sube las
 // suyas), autoalojadas en /public/demo (ver nota en Inicio.jsx).
 const SERVICIOS_HERO_IMG = '/demo/servicios-hero.jpg'
 const SERVICIOS_BODAS_IMG = '/demo/servicios-bodas.jpg'
 const SERVICIOS_TALLER_IMG = '/demo/servicios-taller.jpg'
+const HERO_ASPECT = getGallerySection('servicios_hero').aspect
+const BODAS_ASPECT = getGallerySection('servicios_bodas').aspect
+const TALLER_ASPECT = getGallerySection('servicios_taller').aspect
 
 export default function Servicios() {
   const demoMode = useDemoMode()
@@ -42,7 +46,7 @@ export default function Servicios() {
       />
       {/* Hero */}
       <section className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-section-gap">
-        <div className="relative w-full h-[716px] min-h-[500px] flex items-end pb-12 px-8 md:px-16 overflow-hidden">
+        <div style={{ aspectRatio: String(HERO_ASPECT) }} className="relative w-full aspect-[16/9] overflow-hidden">
           {/* Background. Es una imagen de fondo (no <img>), así que para que el
               texto alternativo cuente para accesibilidad se expone con
               role="img" + aria-label cuando hay foto. */}
@@ -57,9 +61,9 @@ export default function Servicios() {
             }
           />
           {/* Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/70 to-transparent hidden md:block" />
           {/* Content */}
-          <div className="relative z-10 max-w-3xl">
+          <div className="absolute z-10 left-16 right-16 bottom-12 max-w-3xl hidden md:block">
             <h1 className="font-display-lg text-display-lg text-surface-bright mb-4 drop-shadow-md">
               {heroTitulo}
             </h1>
@@ -73,6 +77,16 @@ export default function Servicios() {
               Pedir información
             </Link>
           </div>
+        </div>
+        <div className="md:hidden bg-primary text-on-primary p-6">
+          <h1 className="font-headline text-3xl leading-tight mb-3">{heroTitulo}</h1>
+          <p className="font-body-md text-base text-primary-fixed mb-6 whitespace-pre-line">{heroTexto}</p>
+          <Link
+            to="/contacto"
+            className="inline-flex min-h-11 items-center justify-center px-6 py-3 bg-surface text-primary font-label-sm text-label-sm uppercase tracking-widest"
+          >
+            Pedir información
+          </Link>
         </div>
       </section>
 
@@ -119,6 +133,7 @@ export default function Servicios() {
           <div className="md:col-span-7 order-1 md:order-2 mb-10 md:mb-0">
             <SmartImage
               alt={bodasAlt}
+              style={{ aspectRatio: String(BODAS_ASPECT) }}
               className="w-full h-auto aspect-[4/5] object-cover"
               src={bodasImg}
               width="800"
@@ -200,6 +215,7 @@ export default function Servicios() {
           <div className="md:col-span-6 mb-10 md:mb-0">
             <SmartImage
               alt={tallerAlt}
+              style={{ aspectRatio: String(TALLER_ASPECT) }}
               className="w-full h-auto aspect-square object-cover"
               src={tallerImg}
               width="800"

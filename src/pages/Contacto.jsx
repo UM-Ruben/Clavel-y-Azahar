@@ -4,6 +4,9 @@ import { useBusiness, usePhotos, firstPhotoUrl, firstPhotoAlt, useContent } from
 import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import SmartImage from '../components/SmartImage'
+import { getGallerySection } from '../config/gallery'
+
+const LOCAL_ASPECT = getGallerySection('contacto_local').aspect
 
 // Autoalojada en /public/demo (ver nota en Inicio.jsx).
 const CONTACTO_LOCAL_IMG = '/demo/contacto-local.jpg'
@@ -184,7 +187,8 @@ export default function Contacto() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Cómo llegar a ${b.name} en Google Maps`}
-            className="relative block w-full h-[400px] md:h-[500px] bg-surface-container overflow-hidden group focus-visible:outline-2"
+            style={{ aspectRatio: String(LOCAL_ASPECT) }}
+            className="relative block w-full aspect-[4/3] bg-surface-container overflow-hidden group focus-visible:outline-2"
           >
             <SmartImage
               alt={localAlt}

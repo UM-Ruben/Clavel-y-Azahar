@@ -2,7 +2,7 @@
 // con foto, fechas y descripción. Los eventos pasados desaparecen solos de la
 // web (filtro por fecha en src/lib/content.js).
 import { useEffect, useState } from 'react'
-import { listEvents, saveEvent, deleteEvent } from '../db'
+import { listEvents, saveEvent, deleteEvent, uploadEventMedia } from '../db'
 import ImageUploader from '../components/ImageUploader'
 import ConfirmDialog from '../components/ConfirmDialog'
 import { useToast } from '../components/Toast'
@@ -15,6 +15,7 @@ const EMPTY = {
   end_date: '',
   image_url: '',
   image_path: '',
+  original_path: '',
   published: true,
 }
 
@@ -38,7 +39,7 @@ export default function EventsAdmin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function save(ev) {
+  async function save(ev, previous) {
     if (!ev.title.trim()) {
       toast.error('El evento necesita un título.')
       return
@@ -46,7 +47,7 @@ export default function EventsAdmin() {
     setBusy(true)
     try {
       const clean = { ...ev, start_date: ev.start_date || null, end_date: ev.end_date || null }
-      await saveEvent(clean)
+      await saveEvent(clean, previous)
       toast.ok(ev.id ? 'Evento actualizado.' : 'Evento creado.')
       setEditing(null)
       await load()
@@ -186,11 +187,19 @@ function EventForm({ event, onCancel, onSave, busy }) {
         <Field label="Foto (opcional)">
           <div className="max-w-sm">
             <ImageUploader
-              folder="eventos"
               currentUrl={form.image_url || null}
               label=""
               aspect={4 / 3}
-              onUploaded={({ url, path }) => setForm((f) => ({ ...f, image_url: url, image_path: path }))}
+              onUploaded={async (upload) => {
+                const result = await uploadEventMedia(upload)
+                setForm((f) => ({
+                  ...f,
+                  image_url: result.url,
+                  image_path: result.path,
+                  original_path: result.originalPath,
+                }))
+                return result
+              }}
             />
           </div>
         </Field>
@@ -202,7 +211,7 @@ function EventForm({ event, onCancel, onSave, busy }) {
 
         <div className="flex gap-3 pt-2">
           <button
-            onClick={() => onSave(form)}
+            onClick={() => onSave(form, event)}
             disabled={busy}
             className="bg-primary text-on-primary px-6 py-3 rounded-lg text-sm font-semibold uppercase tracking-wider hover:bg-surface-tint transition-colors disabled:opacity-60"
           >

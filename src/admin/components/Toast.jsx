@@ -1,6 +1,6 @@
 // Avisos emergentes (éxito / error) para el panel. Uso: const toast = useToast()
 // y luego toast.ok('Guardado') o toast.error('No se pudo guardar').
-import { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 const ToastContext = createContext(null)
 
@@ -15,10 +15,10 @@ export function ToastProvider({ children }) {
     }, 4000)
   }, [])
 
-  const api = {
+  const api = useMemo(() => ({
     ok: (m) => push('ok', m),
     error: (m) => push('error', m),
-  }
+  }), [push])
 
   return (
     <ToastContext.Provider value={api}>

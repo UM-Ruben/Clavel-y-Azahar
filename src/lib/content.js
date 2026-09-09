@@ -59,9 +59,11 @@ function useQuery(key, run) {
     }
     document.addEventListener('visibilitychange', onFocusBack)
     window.addEventListener('focus', onFocusBack)
+    const interval = window.setInterval(() => refresh(false), 60_000)
 
     return () => {
       active = false
+      window.clearInterval(interval)
       document.removeEventListener('visibilitychange', onFocusBack)
       window.removeEventListener('focus', onFocusBack)
     }

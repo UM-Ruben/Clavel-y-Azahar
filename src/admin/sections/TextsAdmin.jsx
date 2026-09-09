@@ -2,7 +2,7 @@
 // páginas y las tarjetas de suscripción. Cada texto cae a su valor por defecto
 // (src/lib/textDefaults.js) si la dueña no lo ha cambiado.
 import { useEffect, useState } from 'react'
-import { getAllContent, saveContent } from '../db'
+import { getAllContent, saveContent, uploadEventMedia } from '../db'
 import { textDefaults, subscriptionsDefault } from '../../lib/textDefaults'
 import ImageUploader from '../components/ImageUploader'
 import { useToast } from '../components/Toast'
@@ -140,10 +140,14 @@ function SubscriptionsEditor({ value, saving, onSave }) {
         {cards.map((card, i) => (
           <div key={i} className="border border-outline-variant rounded-xl p-5 bg-surface-container-lowest grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-5">
             <ImageUploader
-              folder="suscripciones"
               currentUrl={card.img || null}
               label=""
-              onUploaded={({ url }) => setCard(i, { img: url })}
+              aspect={4 / 3}
+              onUploaded={async (upload) => {
+                const result = await uploadEventMedia(upload, 'suscripciones')
+                setCard(i, { img: result.url, image_path: result.path, original_path: result.originalPath })
+                return result
+              }}
             />
             <div className="space-y-3">
               <input value={card.title || ''} onChange={(e) => setCard(i, { title: e.target.value })} placeholder="Nombre del plan" className="admin-input" />

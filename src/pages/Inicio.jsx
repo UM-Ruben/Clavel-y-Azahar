@@ -6,6 +6,7 @@ import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyGallery from '../components/EmptyGallery'
 import SmartImage from '../components/SmartImage'
+import { getGallerySection } from '../config/gallery'
 
 // Imagen por defecto del hero (se usa si la dueña no ha subido la suya).
 // Autoalojadas en /public/demo — antes enlazaban a lh3.googleusercontent.com/
@@ -13,6 +14,8 @@ import SmartImage from '../components/SmartImage'
 // plantilla), que no son estables para uso público: podían devolver una
 // imagen distinta o completamente ajena en cada carga.
 const INICIO_HERO_IMG = '/demo/inicio-hero.jpg'
+const HERO_ASPECT = getGallerySection('inicio_hero').aspect
+const FEATURED_ASPECT = getGallerySection('inicio_destacados').aspect
 
 const featuredDefault = [
   {
@@ -82,7 +85,7 @@ export default function Inicio() {
 
           {/* Hero image */}
           <div className="md:col-span-7">
-            <div className="aspect-[4/5] md:aspect-auto md:h-[540px] overflow-hidden border border-on-tertiary-container/30 bg-surface-container-high relative">
+            <div style={{ aspectRatio: String(HERO_ASPECT) }} className="aspect-[4/5] overflow-hidden border border-on-tertiary-container/30 bg-surface-container-high relative">
               <SmartImage
                 className="w-full h-full object-cover"
                 alt={heroAlt}
@@ -125,7 +128,7 @@ export default function Inicio() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
             {featured.map((item, i) => (
               <Link to="/colecciones" key={item.title || i} className="group cursor-pointer block">
-                <div className="aspect-[4/5] overflow-hidden bg-surface-container-high mb-5">
+                <div style={{ aspectRatio: String(FEATURED_ASPECT) }} className="aspect-[4/5] overflow-hidden bg-surface-container-high mb-5">
                   <SmartImage
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt={item.alt}

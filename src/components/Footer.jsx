@@ -38,9 +38,9 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-6">
             <div className="flex items-center gap-4 text-primary">
               <Logo className="h-24 w-auto shrink-0" />
-              <span className="flex flex-col leading-tight">
+              <span className="flex min-w-0 flex-col leading-tight">
                 <span className="font-headline text-2xl text-primary">{site.name}</span>
-                <span className="font-body-md text-[10px] uppercase tracking-[0.18em] text-on-surface-variant whitespace-nowrap">
+                <span className="font-body-md text-[10px] uppercase tracking-[0.18em] text-on-surface-variant leading-relaxed">
                   {site.brand.slogan}
                 </span>
               </span>
