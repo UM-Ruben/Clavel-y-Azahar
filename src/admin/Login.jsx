@@ -30,9 +30,9 @@ export default function Login({ onSignIn, onReset }) {
       await onReset()
       setStatus('idle')
       setMessage('Te hemos enviado un email para restablecer la contraseña.')
-    } catch {
+    } catch (err) {
       setStatus('error')
-      setMessage('No se ha podido enviar el email de recuperación.')
+      setMessage(traducirErrorRecuperacion(err))
     }
   }
 
@@ -120,4 +120,15 @@ function traducirError(err) {
   if (msg.includes('invalid login')) return 'Contraseña incorrecta.'
   if (msg.includes('email not confirmed')) return 'La cuenta aún no está confirmada.'
   return 'No se ha podido iniciar sesión. Revisa los datos e inténtalo de nuevo.'
+}
+
+function traducirErrorRecuperacion(err) {
+  const msg = (err?.message || '').toLowerCase()
+  if (msg.includes('email_provider_disabled') || msg.includes('email logins are disabled')) {
+    return 'El acceso por email está desactivado en Supabase.'
+  }
+  if (msg.includes('rate limit') || msg.includes('after') || msg.includes('seconds')) {
+    return 'Espera un minuto antes de solicitar otro correo de recuperación.'
+  }
+  return 'No se ha podido enviar el email de recuperación. Inténtalo de nuevo en unos minutos.'
 }

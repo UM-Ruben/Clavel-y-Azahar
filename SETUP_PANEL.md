@@ -43,8 +43,10 @@ Tiempo estimado: **25–35 minutos**, una sola vez.
      el formulario de acceso.
 3. **Crea SOLO este usuario.** No añadas ninguno más: así ella es la única cuenta.
 4. **Importante (seguridad):** ve a **Authentication** → **Providers** (o
-   **Sign In / Providers**) → **Email** y **desactiva** «Allow new users to sign up».
-   Así nadie puede registrarse por su cuenta y queda **una sola cuenta**.
+   **Sign In / Providers**) → **Email**. Mantén el proveedor Email activado para
+   que funcionen el acceso y la recuperación. El alta pública queda bloqueada
+   por la configuración global del proyecto y por la protección del servidor,
+   que solo reconoce el correo fijo de la tienda.
 5. La primera cuenta que inicie sesión después de aplicar el esquema se registra
    como propietaria. A partir de ese momento ninguna otra cuenta puede reclamar
    el panel, aunque consiga autenticarse.

@@ -11,7 +11,9 @@ additional_redirect_urls = [
 ]
 
 [auth.email]
-enable_signup = false
+# Mantiene disponible el acceso y la recuperación por email. El alta de nuevas
+# cuentas sigue bloqueada por `auth.enable_signup = false` arriba.
+enable_signup = true
 
 [functions.publish-photo]
 verify_jwt = false
