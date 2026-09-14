@@ -255,6 +255,28 @@ export default function Contacto() {
                   {b.phoneHuman}
                 </a>
               </div>
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-primary" aria-hidden="true">
+                  smartphone
+                </span>
+                <a
+                  className="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors"
+                  href={`tel:+${String(b.whatsapp).replace(/\D/g, '')}`}
+                >
+                  {b.phoneMobileHuman}
+                </a>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="material-symbols-outlined text-primary" aria-hidden="true">
+                  mail
+                </span>
+                <a
+                  className="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors break-all"
+                  href={`mailto:${b.email}`}
+                >
+                  {b.email}
+                </a>
+              </div>
             </div>
 
             {/* Hours */}
@@ -270,7 +292,7 @@ export default function Contacto() {
                   {b.hours.map((h) => (
                     <li
                       key={h.days}
-                      className={`flex justify-between w-48 ${h.closed ? 'text-outline' : ''}`}
+                      className={`grid grid-cols-[minmax(0,1fr)_auto] gap-4 ${h.closed ? 'text-outline' : ''}`}
                     >
                       <span>{h.days}</span>
                       <span>{h.time}</span>

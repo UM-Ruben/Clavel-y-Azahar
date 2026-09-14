@@ -27,6 +27,12 @@ Tiempo estimado: **25–35 minutos**, una sola vez.
 3. Pulsa **Run**. Debe decir «Success». (Puedes ejecutarlo más de una vez sin
    problema.) Esto crea las tablas, el almacén de fotos y las reglas de seguridad.
 
+> **Si ya tenías el panel funcionando** y solo quieres recoger una actualización
+> del código (como los apartados dinámicos de "Colecciones"), vuelve a pegar
+> `supabase/schema.sql` entero y pulsa **Run**: es idempotente, no borra nada
+> de lo que ya hubiera. Después repite el **paso 6** (redesplegar `publish-photo`)
+> para que el panel acepte lo nuevo.
+
 ## 3. Crear la única cuenta de acceso
 
 1. Menú lateral → **Authentication** → **Users** → **Add user** → **Create new user**.
@@ -101,15 +107,20 @@ ni en Vercel: solo pertenece a Supabase Cron.
 
 ## Cómo usa el panel la dueña
 
-- **Galería**: elige una zona de la web (cabeceras, destacados, colecciones…) y
-  sube, reencuadra, sustituye, ordena, oculta o retira fotos. Admite JPG, PNG,
+- **Galería**: elige una zona de la web (cabeceras, destacados…) y sube,
+  reencuadra, sustituye, ordena, oculta o retira fotos. Admite JPG, PNG,
   WebP y HEIC de iPhone hasta 20 MB. La imagen publicada no cambia hasta pulsar
   **Publicar** y, si algo falla, la anterior permanece visible. Las versiones
-  retiradas o sustituidas se pueden restaurar durante 30 días. Si una colección
+  retiradas o sustituidas se pueden restaurar durante 30 días. Si una zona
   se queda sin fotos, esa parte de la web muestra un
   hueco neutro, nunca una foto de mentira (para ver el diseño ya «relleno» de
   fotos de ejemplo, arranca `pnpm dev` y entra en `/demo` — esa vista no existe
   en la web publicada).
+- **Colecciones**: la página "Nuestras Colecciones" no tiene apartados fijos —
+  la dueña crea, borra y reordena los que quiera, cada uno con su título, su
+  breve descripción y sus propias fotos (mismo editor que en Galería). Si no
+  hay ningún apartado creado, esa parte de la web no enseña nada de mentira:
+  simplemente no aparece, hasta que se crea el primero.
 - **Eventos**: crea talleres y fechas especiales con foto, fecha y descripción.
   Los eventos pasados desaparecen solos de la web.
 - **Textos**: cambia títulos y descripciones de las páginas. Si deja un campo

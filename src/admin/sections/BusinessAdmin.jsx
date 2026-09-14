@@ -54,6 +54,7 @@ export default function BusinessAdmin() {
       <Group title="Contacto">
         <Field label="Teléfono (cómo se muestra)"><input className="admin-input" value={form.phone_human} onChange={(e) => set('phone_human', e.target.value)} placeholder={site.phoneHuman} /></Field>
         <Field label="Teléfono (para llamar, sin espacios)"><input className="admin-input" value={form.phone_tel} onChange={(e) => set('phone_tel', e.target.value)} placeholder={site.phoneTel} /></Field>
+        <Field label="Móvil (cómo se muestra)"><input className="admin-input" value={form.phone_mobile_human} onChange={(e) => set('phone_mobile_human', e.target.value)} placeholder={site.phoneMobileHuman} /></Field>
         <Field label="WhatsApp (con prefijo del país, ej. +34 600 00 00 00)"><input className="admin-input" value={form.whatsapp} onChange={(e) => set('whatsapp', e.target.value)} placeholder={site.whatsapp} /></Field>
         <Field label="Mensaje inicial de WhatsApp"><input className="admin-input" value={form.whatsapp_message} onChange={(e) => set('whatsapp_message', e.target.value)} placeholder={site.whatsappMessage} /></Field>
         <Field label="Email"><input className="admin-input" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder={site.email} /></Field>
@@ -129,6 +130,7 @@ function fromRow(row) {
   return {
     phone_human: r.phone_human || '',
     phone_tel: r.phone_tel || '',
+    phone_mobile_human: r.phone_mobile_human || '',
     whatsapp: r.whatsapp || '',
     whatsapp_message: r.whatsapp_message || '',
     email: r.email || '',
@@ -146,6 +148,7 @@ function toRow(form) {
   return {
     phone_human: form.phone_human || null,
     phone_tel: form.phone_tel || null,
+    phone_mobile_human: form.phone_mobile_human || null,
     whatsapp: form.whatsapp || null,
     whatsapp_message: form.whatsapp_message || null,
     email: form.email || null,

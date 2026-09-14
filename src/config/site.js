@@ -27,44 +27,47 @@ export const site = {
   formerName: 'Entrerramblas',
   tagline: 'Floristería en Los Ramos, Murcia · diseño floral de temporada',
   // Dominio final, SIN barra al final. Se usa para canonical, OG y sitemap.
-  domain: 'https://www.tudominio.com', // TODO: dominio real (ver PENDIENTES.md)
+  domain: 'https://www.clavelyazahar.es',
 
   // --- Contacto / NAP (debe COINCIDIR EXACTO con tu Google Business Profile)
-  phoneHuman: '+34 91 234 56 78', // TODO: teléfono real (ver PENDIENTES.md)
-  phoneTel: '+34912345678', // TODO: mismo teléfono en formato tel: (sin espacios)
+  // Se muestra el fijo como teléfono principal; el móvil se usa para WhatsApp.
+  phoneHuman: '968 30 51 01',
+  phoneTel: '+34968305101', // mismo teléfono en formato tel: (sin espacios)
+  phoneMobileHuman: '690 19 43 41', // móvil (también usado para WhatsApp)
 
   // Número de WhatsApp. Puedes escribirlo con el MISMO formato que el teléfono
   // de arriba (con «+», espacios o guiones): al generar el enlace se queda solo
   // con los dígitos. Debe incluir el prefijo del país (34 en España).
-  whatsapp: '+34 600 00 00 00', // TODO: WhatsApp real (ver PENDIENTES.md)
+  whatsapp: '+34 690 19 43 41',
   whatsappMessage: 'Hola, me gustaría hacer una consulta sobre vuestras flores.',
 
-  email: 'hola@tudominio.com', // TODO: email real del negocio (ver PENDIENTES.md)
+  email: 'entreramblasclavelyazahar@gmail.com',
 
   // --- Dirección ---------------------------------------------------------
   address: {
-    street: 'Calle Pendiente de confirmar, s/n', // TODO: calle y número reales (ver PENDIENTES.md)
+    street: 'Avenida de Murcia 61',
     district: 'Los Ramos', // pedanía — aparece en títulos «Floristería en Los Ramos, Murcia»
-    postalCode: '30589', // TODO: confirmar CP de Los Ramos
+    postalCode: '30589',
     city: 'Murcia',
     region: 'Murcia',
     country: 'España',
     // Coordenadas para el enlace «Cómo llegar» y el JSON-LD (5+ decimales).
-    lat: 37.949, // TODO: aprox. centro de Los Ramos — sustituir por coords exactas de la tienda
+    lat: 37.949, // TODO: aprox. centro de Los Ramos — sustituir por coords exactas de la tienda (ver PENDIENTES.md)
     lng: -1.041, // TODO: ídem
   },
 
   // --- Horario (texto mostrado; mantenlo igual que en el JSON-LD) ---------
   hours: [
-    // TODO: horario real de la tienda (ver PENDIENTES.md)
-    { days: 'Lunes – Sábado', time: '9:00 – 20:00', closed: false },
-    { days: 'Domingo', time: 'Cerrado', closed: true },
+    { days: 'Lunes – Viernes', time: '9:30 – 18:30', closed: false },
+    { days: 'Sábado', time: '10:00 – 13:30', closed: false },
+    { days: 'Festivos', time: 'Abierto', closed: false },
   ],
 
   // --- Redes sociales (vacío = no se muestra el icono) --------------------
   social: {
-    instagram: 'https://instagram.com/tu_floristeria', // TODO: ver PENDIENTES.md
-    facebook: 'https://facebook.com/tu_floristeria', // TODO: ver PENDIENTES.md
+    // Las cuentas serán nuevas. Déjalas vacías hasta disponer de sus URLs.
+    instagram: '',
+    facebook: '',
   },
 
   // --- Formulario de contacto -------------------------------------------

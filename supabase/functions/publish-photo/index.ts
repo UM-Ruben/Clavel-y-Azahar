@@ -7,10 +7,14 @@ const CORS = {
 const MAX_ORIGINAL = 20 * 1024 * 1024
 const MAX_DERIVATIVE = 6 * 1024 * 1024
 const ZONES = new Set([
-  'inicio_hero', 'inicio_destacados', 'colecciones_temporada',
-  'colecciones_centros', 'colecciones_exoticas', 'servicios_hero',
+  'inicio_hero', 'inicio_destacados', 'servicios_hero',
   'servicios_bodas', 'servicios_taller', 'contacto_local', 'eventos', 'suscripciones',
 ])
+// Apartados de "Nuestras Colecciones": la dueña crea tantos como quiera desde
+// el panel, cada uno con su propio id (ver src/lib/collections.js), así que
+// su categoría no puede vivir en la lista fija de arriba. Se admite cualquier
+// `coleccion_<uuid>` que corresponda a un apartado real (comprobado más abajo).
+const COLLECTION_ZONE = /^coleccion_([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/i
 
 Deno.serve(async (request) => {
   if (request.method === 'OPTIONS') return new Response('ok', { headers: CORS })
@@ -50,7 +54,12 @@ Deno.serve(async (request) => {
   const zone = String(body.zone || '')
   const originalStage = String(body.originalPath || '')
   const derivativeStage = String(body.derivativePath || '')
-  if (!ZONES.has(zone) || !isUuid(operationId)) return json({ error: 'INVALID_REQUEST' }, 400)
+  const collectionMatch = zone.match(COLLECTION_ZONE)
+  if ((!ZONES.has(zone) && !collectionMatch) || !isUuid(operationId)) return json({ error: 'INVALID_REQUEST' }, 400)
+  if (collectionMatch) {
+    const { data: collection } = await service.from('collections').select('id').eq('id', collectionMatch[1]).maybeSingle()
+    if (!collection) return json({ error: 'INVALID_REQUEST' }, 400)
+  }
   const stagePrefix = `${auth.user.id}/${operationId}/`
   if (!originalStage.startsWith(stagePrefix) || !derivativeStage.startsWith(stagePrefix)) {
     return json({ error: 'INVALID_STORAGE_PATH' }, 400)

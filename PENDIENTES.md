@@ -30,58 +30,85 @@ Lista de lo que hay que **pedir a la encargada** y dónde se aplica cada dato.
 > con `TODO` (buscar "TODO" en el proyecto).
 
 ## 1. Dominio web
-- [ ] Dominio final (ej. `https://www.entreramblas.es`), comprarlo si no existe.
-- Dónde se aplica:
-  - `src/config/site.js` → `domain`
-  - `index.html` → `og:image`, `twitter:image` y JSON-LD (`image`, `url`)
-  - `public/robots.txt` → línea `Sitemap:`
-  - `public/sitemap.xml` → todas las URLs `<loc>`
+
+- [X] Dominio final: **clavelyazahar.es** → aplicado en `site.js` (`domain`) e `index.html`
+  (`og:image`, `twitter:image`, JSON-LD `image`/`url`).
+- [X] `public/robots.txt` y `public/sitemap.xml` actualizados con el dominio real.
+- [ ] Comprar el dominio si aún no está comprado y configurar el hosting/DNS.
 
 ## 2. Contacto
-- [ ] Teléfono de la tienda → `site.js` (`phoneHuman` y `phoneTel`) + `index.html` JSON-LD `telephone`
-- [ ] Número de WhatsApp (formato `34XXXXXXXXX`, sin `+` ni espacios) → `site.js` `whatsapp`
-- [ ] Email del negocio → `site.js` `email`
+
+- [X] Teléfono fijo: **968 30 51 01** → `site.js` (`phoneHuman`/`phoneTel`) + JSON-LD `telephone`
+- [X] Móvil: **690 19 43 41** → `site.js` (`phoneMobileHuman`), también usado como WhatsApp
+- [X] WhatsApp: **690 19 43 41** (confirmado que es el mismo que el móvil) → `site.js` `whatsapp`
+- [X] Email: **entreramblasclavelyazahar@gmail.com** → `site.js` `email`
 
 ## 3. Dirección exacta y Google Business Profile
-- [ ] Calle y número de la tienda en Los Ramos
-- [ ] Confirmar código postal (¿30589?)
-- [ ] Coordenadas exactas (en Google Maps: clic derecho sobre la tienda → copiar coordenadas)
-- [ ] **IMPORTANTE (traspaso)**: la ficha de Google Business de *Entrerramblas*
-  debe transferirse y **renombrarse a "Clavel y Azahar"** (así se conservan
-  reseñas, antigüedad y posición local). Confirmar el nombre EXACTO con el que
-  figura hoy la ficha para casar el `alternateName` del JSON-LD. Nombre y
-  dirección de la web deben coincidir EXACTOS con los de la ficha.
+
+- [X] Calle y número: **Avenida de Murcia 61** → `site.js` `address.street` + JSON-LD
+- [X] Código postal confirmado: **30589**
+- [ ] Coordenadas exactas (en Google Maps: clic derecho sobre la tienda → copiar
+  coordenadas). De momento se mantiene el aproximado del centro de Los Ramos
+  (`lat: 37.949`, `lng: -1.041`) en `site.js` y en el JSON-LD.
+- [ ] **IMPORTANTE (traspaso) — sigue sin confirmar**: la ficha de Google Business de
+  *Entrerramblas* debe transferirse y **renombrarse a "Clavel y Azahar"** (así se
+  conservan reseñas, antigüedad y posición local). Confirmar el nombre EXACTO con el
+  que figura hoy la ficha para añadir con seguridad el `alternateName` del JSON-LD.
+  Por ahora se ha omitido ese campo para no publicar un nombre antiguo inventado.
+  Nombre y dirección de la web deben coincidir EXACTOS con los de la ficha.
+
 - Dónde: `site.js` → `address.*` + `index.html` JSON-LD (`address`, `geo`, `alternateName`)
 
 ## 4. Horario real
-- [ ] Días y horas de apertura (¿cierre a mediodía?, ¿domingos?)
-- Dónde: `site.js` → `hours` + `index.html` JSON-LD `openingHoursSpecification`
+
+- [X] Lunes a viernes 9:30–18:30, sábados 10:00–13:30, abierto en festivos →
+  `site.js` `hours` + `index.html` JSON-LD `openingHoursSpecification`
+- [ ] Nota: schema.org no tiene forma estándar de marcar "abierto en festivos"
+  (varía cada año). Queda solo como texto visible en la web; para que Google
+  lo respete en Maps hay que configurarlo aparte como **horario especial** en
+  la propia ficha de Google Business.
+- [ ] Confirmar el horario de los festivos concretos en Google Business; la web muestra
+  "Abierto" porque no se ha facilitado una franja horaria específica.
 
 ## 5. Redes sociales
-- [ ] ¿Se conservan las cuentas de Instagram/Facebook del anterior dueño? URLs definitivas.
-- Dónde: `site.js` → `social.*` + `index.html` JSON-LD `sameAs`
-- Nota: mientras queden las URLs de plantilla, los iconos NO se muestran (correcto).
+
+- [X] Confirmado: se crean cuentas **nuevas** de Instagram/Facebook (no se
+  conservan las del anterior dueño).
+- [ ] En cuanto existan, pegar las URLs definitivas en `site.js` → `social.*`
+  y en `index.html` JSON-LD `sameAs`.
+
+- Nota: mientras las URLs estén vacías, los iconos NO se muestran (correcto).
 
 ## 6. Formulario de contacto
+
 - [ ] Crear cuenta gratuita en [Formspree](https://formspree.io) con el email del
   negocio y pegar el endpoint en `site.js` → `formEndpoint`.
+
 - Nota: mientras tanto el formulario funciona en "modo demo" (no envía nada).
 
 ## 7. Imágenes
+
 - [ ] `og-image.jpg` (1200×630, foto de la tienda o un ramo) → subir a `/public`
   (ya está referenciada en `index.html`; solo falta el archivo y el dominio real)
 - [ ] `apple-touch-icon.png` (180×180) → subir a `/public` y descomentar la línea
   correspondiente en `index.html`
-- [ ] Fotos reales de la tienda y de los productos para sustituir las imágenes
-  de la plantilla (están en `src/pages/Inicio.jsx`, `Colecciones.jsx`,
-  `Servicios.jsx` y `Contacto.jsx` como URLs externas)
+- [ ] Nani subirá desde el panel las fotos reales de la tienda y de los productos.
+  Hasta entonces, la web pública muestra huecos neutros; las imágenes de muestra solo
+  aparecen en `/demo`.
 
 ## 8. Contenido a revisar con la encargada
+
 - [ ] ¿Los servicios mostrados (bodas/eventos, suscripciones, talleres) se ofrecen
   realmente? Ajustar textos y precios en `src/pages/Servicios.jsx`.
-- [ ] Nombres y descripciones de las colecciones en `src/pages/Colecciones.jsx`.
+- [X] Nombres y descripciones de las colecciones → ya NO están fijos en el código.
+  La dueña elige desde el panel (pestaña **Colecciones**) cuántos apartados hay,
+  con su título, su breve descripción y sus fotos. Para que funcione en un
+  proyecto ya conectado hay que volver a pegar `supabase/schema.sql` (o aplicar
+  `supabase/migrations/202609110001_dynamic_collections.sql`) y redesplegar la
+  función `publish-photo` — ver SETUP_PANEL.md, paso 6.
 
 ## Checklist final antes de publicar
+
 - [ ] Buscar "TODO" en todo el proyecto y confirmar que no queda ninguno
 - [ ] Validar el JSON-LD en https://search.google.com/test/rich-results
 - [ ] `pnpm build` sin errores y revisar las páginas generadas en `dist/`

@@ -2,87 +2,57 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { site } from '../config/site'
 import Seo from '../components/Seo'
-import { usePhotos, photosOr, useContent } from '../lib/content'
+import { usePhotos, photosOr, useContent, useCollections } from '../lib/content'
+import { collectionCategory } from '../lib/collections'
 import { textDefaults } from '../lib/textDefaults'
 import { useDemoMode } from '../lib/demoMode'
 import EmptyGallery from '../components/EmptyGallery'
 import SmartImage from '../components/SmartImage'
-import { getGallerySection } from '../config/gallery'
 
-const INITIAL_VISIBLE = getGallerySection('colecciones_temporada').initialVisible
-const TEMPORADA_ASPECT = getGallerySection('colecciones_temporada').aspect
-const CENTROS_ASPECT = getGallerySection('colecciones_centros').aspect
-const EXOTICAS_ASPECT = getGallerySection('colecciones_exoticas').aspect
+const INITIAL_VISIBLE = 12
 
-// Imágenes de ejemplo autoalojadas en /public/demo (ver nota en Inicio.jsx:
-// antes enlazaban a previsualizaciones internas de Google poco fiables).
-const temporadaCards = [
+// Apartados de ejemplo, solo para /demo (ver nota en Inicio.jsx: la demo
+// enseña siempre el diseño «relleno», nunca depende de lo que haya —o falte—
+// en Supabase). En la web real, la dueña crea sus propios apartados desde el
+// panel («Colecciones»): título, breve descripción y fotos, en el número que
+// ella quiera. Imágenes autoalojadas en /public/demo.
+const demoCollections = [
   {
-    img: '/demo/colecciones-temporada-despertar-primavera.jpg',
-    alt: 'Ramo despertar de primavera',
-    badge: 'De temporada',
-    title: 'Despertar de Primavera',
+    id: 'demo-temporada',
+    title: 'Ramos de Temporada',
+    description: 'Ramos hechos a mano con la flor fresca de cada estación.',
+    photos: [
+      { img: '/demo/colecciones-temporada-despertar-primavera.jpg', alt: 'Ramo despertar de primavera' },
+      { img: '/demo/colecciones-temporada-cosecha-otono.jpg', alt: 'Arreglo de cosecha de otoño' },
+      { img: '/demo/colecciones-temporada-pradera-silvestre.jpg', alt: 'Ramo de pradera silvestre' },
+    ],
   },
   {
-    img: '/demo/colecciones-temporada-cosecha-otono.jpg',
-    alt: 'Arreglo de cosecha de otoño',
-    badge: null,
-    title: 'Cosecha de Otoño',
+    id: 'demo-centros',
+    title: 'Centros de Mesa',
+    description: 'Arreglos para tu mesa, del detalle íntimo a la gran celebración.',
+    photos: [
+      { img: '/demo/colecciones-centro-gran-finca.jpg', alt: 'Centro de mesa elegante para comedor' },
+      { img: '/demo/colecciones-centro-minimo-escultorico.jpg', alt: 'Centro de mesa minimalista moderno' },
+    ],
   },
   {
-    img: '/demo/colecciones-temporada-pradera-silvestre.jpg',
-    alt: 'Ramo de pradera silvestre',
-    badge: null,
-    title: 'Pradera Silvestre',
-  },
-]
-
-const centerpieces = [
-  {
-    img: '/demo/colecciones-centro-gran-finca.jpg',
-    alt: 'Centro de mesa elegante para comedor',
-    title: 'La Gran Finca',
-    desc: 'Un arreglo bajo y lujoso perfecto para cenas íntimas, con hortensias y verdes colgantes.',
-  },
-  {
-    img: '/demo/colecciones-centro-minimo-escultorico.jpg',
-    alt: 'Centro de mesa minimalista moderno',
-    title: 'Mínimo Escultórico',
-    desc: 'Centrado en siluetas llamativas y espacio negativo, esta pieza arquitectónica llama la atención.',
-  },
-]
-
-const exoticas = [
-  {
-    img: '/demo/colecciones-exotica-monstera-albo.jpg',
-    alt: 'Monstera Deliciosa',
-    title: 'Monstera Albo',
-  },
-  {
-    img: '/demo/colecciones-exotica-paphiopedilum.jpg',
-    alt: 'Orquídea rara',
-    title: 'Paphiopedilum',
-  },
-  {
-    img: '/demo/colecciones-exotica-anthurium-terciopelo.jpg',
-    alt: 'Anthurium Clarinervium',
-    title: 'Anthurium Terciopelo',
+    id: 'demo-exoticas',
+    title: 'Plantas Exóticas',
+    description: 'Plantas raras y exóticas para dar personalidad a cualquier rincón.',
+    photos: [
+      { img: '/demo/colecciones-exotica-monstera-albo.jpg', alt: 'Monstera Deliciosa' },
+      { img: '/demo/colecciones-exotica-paphiopedilum.jpg', alt: 'Orquídea rara' },
+      { img: '/demo/colecciones-exotica-anthurium-terciopelo.jpg', alt: 'Anthurium Clarinervium' },
+    ],
   },
 ]
 
 export default function Colecciones() {
-  const [visibleTemporada, setVisibleTemporada] = useState(INITIAL_VISIBLE)
-  const [visibleCentros, setVisibleCentros] = useState(INITIAL_VISIBLE)
-  const [visiblePlantas, setVisiblePlantas] = useState(INITIAL_VISIBLE)
   const demoMode = useDemoMode()
-  const { photos: temporadaDb } = usePhotos('colecciones_temporada')
-  const { photos: centrosDb } = usePhotos('colecciones_centros')
-  const { photos: exoticasDb } = usePhotos('colecciones_exoticas')
+  const { collections: collectionsDb } = useCollections()
   const intro = useContent('colecciones_intro', textDefaults.colecciones_intro)
-
-  const temporada = photosOr(temporadaDb, temporadaCards, demoMode)
-  const centros = photosOr(centrosDb, centerpieces, demoMode)
-  const plantas = photosOr(exoticasDb, exoticas, demoMode)
+  const collections = demoMode ? demoCollections : (collectionsDb || [])
 
   return (
     <div className="pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
@@ -100,135 +70,55 @@ export default function Colecciones() {
         <div className="h-[0.5px] w-24 bg-on-tertiary-container mx-auto mt-12" />
       </div>
 
-      {/* Ramos de Temporada */}
-      <section className="mb-section-gap">
-        <h2 className="font-headline-lg text-headline-lg text-primary mb-12 flex items-center gap-4">
-          Ramos de Temporada
-          <span className="h-[0.5px] flex-grow bg-outline-variant" />
-        </h2>
-        {temporada.length === 0 ? (
-          <EmptyGallery message="Muy pronto verás aquí los ramos de temporada." />
-        ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-16">
-          {temporada.slice(0, visibleTemporada).map((card, i) => (
-            <Link to="/contacto" key={card.title || i} className="group cursor-pointer block">
-              <div style={{ aspectRatio: String(TEMPORADA_ASPECT) }} className="relative aspect-[4/5] overflow-hidden bg-surface-container-low mb-6">
+      {collections.length === 0 ? (
+        <EmptyGallery message="Muy pronto verás aquí nuestras colecciones." />
+      ) : (
+        collections.map((collection) => <CollectionSection key={collection.id} collection={collection} />)
+      )}
+    </div>
+  )
+}
+
+function CollectionSection({ collection }) {
+  const demoMode = useDemoMode()
+  const [visible, setVisible] = useState(INITIAL_VISIBLE)
+  const { photos: photosDb } = usePhotos(collectionCategory(collection.id))
+  const photos = photosOr(photosDb, collection.photos || [], demoMode)
+
+  return (
+    <section className="mb-section-gap last:mb-0">
+      <h2 className="font-headline-lg text-headline-lg text-primary mb-4 flex items-center gap-4">
+        {collection.title}
+        <span className="h-[0.5px] flex-grow bg-outline-variant" />
+      </h2>
+      {collection.description && (
+        <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mb-12 whitespace-pre-line">
+          {collection.description}
+        </p>
+      )}
+      {photos.length === 0 ? (
+        <EmptyGallery message="Muy pronto verás aquí las fotos de este apartado." />
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-gutter gap-y-16">
+          {photos.slice(0, visible).map((photo, index) => (
+            <Link to="/contacto" key={photo.img || index} className="group cursor-pointer block">
+              <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
                 <SmartImage
-                  alt={card.alt}
+                  alt={photo.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  src={card.img}
+                  src={photo.img}
                   width="800"
                   height="1000"
                   loading="lazy"
                   decoding="async"
                 />
-                {card.badge && (
-                  <div className="absolute top-4 right-4 bg-[#fecbcb] text-[#061b0e] font-label-sm text-label-sm px-4 py-2 rounded-xl">
-                    {card.badge}
-                  </div>
-                )}
-              </div>
-              <div className="text-center">
-                <h3 className="font-headline-md text-[24px] leading-[32px] text-primary mb-2">
-                  {card.title}
-                </h3>
               </div>
             </Link>
           ))}
         </div>
-        )}
-        <ShowMore visible={visibleTemporada} total={temporada.length} onClick={() => setVisibleTemporada((value) => value + INITIAL_VISIBLE)} />
-      </section>
-
-      {/* Centros de Mesa */}
-      <section className="mb-section-gap">
-        <h2 className="font-headline-lg text-headline-lg text-primary mb-12 flex items-center gap-4">
-          Centros de Mesa
-          <span className="h-[0.5px] flex-grow bg-outline-variant" />
-        </h2>
-        {centros.length === 0 ? (
-          <EmptyGallery message="Muy pronto verás aquí los centros de mesa." />
-        ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-gutter gap-y-16">
-          {centros.slice(0, visibleCentros).map((c, i) => (
-            <div
-              key={c.title || i}
-              className="group flex flex-col md:flex-row gap-8 items-center bg-surface-container-low p-8 rounded-DEFAULT border-[0.5px] border-outline-variant hover:shadow-[0_8px_30px_rgba(6,27,14,0.05)] transition-all duration-300"
-            >
-              <div style={{ aspectRatio: String(CENTROS_ASPECT) }} className="relative w-full md:w-1/2 aspect-square overflow-hidden">
-                <SmartImage
-                  alt={c.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  src={c.img}
-                  width="800"
-                  height="800"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="w-full md:w-1/2 text-left">
-                <h3 className="font-headline-md text-headline-md text-primary mb-4">{c.title}</h3>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-3">
-                  {c.desc}
-                </p>
-                <Link
-                  to="/contacto"
-                  className="inline-block bg-primary text-on-primary font-label-sm text-label-sm px-6 py-3 uppercase tracking-widest hover:bg-surface-tint transition-colors"
-                >
-                  Consultar
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-        )}
-        <ShowMore visible={visibleCentros} total={centros.length} onClick={() => setVisibleCentros((value) => value + INITIAL_VISIBLE)} />
-      </section>
-
-      {/* Plantas Exóticas */}
-      <section>
-        <h2 className="font-headline-lg text-headline-lg text-primary mb-12 flex items-center gap-4">
-          Plantas Exóticas
-          <span className="h-[0.5px] flex-grow bg-outline-variant" />
-        </h2>
-        {plantas.length === 0 ? (
-          <EmptyGallery message="Muy pronto verás aquí nuestras plantas exóticas." />
-        ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-gutter gap-y-12">
-          {plantas.slice(0, visiblePlantas).map((p, i) => (
-            <Link to="/contacto" key={p.title || i} className="group cursor-pointer text-center block">
-              <div style={{ aspectRatio: String(EXOTICAS_ASPECT) }} className="relative aspect-square overflow-hidden rounded-full border border-outline-variant mb-6 mx-auto w-4/5">
-                <SmartImage
-                  alt={p.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  src={p.img}
-                  width="400"
-                  height="400"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <h3 className="font-body-lg text-body-lg text-primary font-semibold mb-1">{p.title}</h3>
-            </Link>
-          ))}
-
-          {/* View all */}
-          <Link to="/contacto" className="group cursor-pointer text-center block">
-            <div className="relative aspect-square overflow-hidden rounded-full border border-outline-variant mb-6 mx-auto w-4/5 flex items-center justify-center bg-surface-container">
-              <span className="material-symbols-outlined text-4xl text-outline-variant" aria-hidden="true">
-                arrow_forward
-              </span>
-            </div>
-            <h3 className="font-body-lg text-body-lg text-primary font-semibold mb-1">
-              Ver todas las plantas
-            </h3>
-            <p className="font-body-md text-body-md text-surface-tint">Consúltanos</p>
-          </Link>
-        </div>
-        )}
-        <ShowMore visible={visiblePlantas} total={plantas.length} onClick={() => setVisiblePlantas((value) => value + INITIAL_VISIBLE)} />
-      </section>
-    </div>
+      )}
+      <ShowMore visible={visible} total={photos.length} onClick={() => setVisible((value) => value + INITIAL_VISIBLE)} />
+    </section>
   )
 }
 

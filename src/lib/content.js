@@ -137,6 +137,18 @@ export function firstPhotoAlt(dbPhotos, fallbackAlt, demoMode = false) {
   return fallbackAlt
 }
 
+// ---- Apartados de "Nuestras Colecciones" (los crea la dueña en el panel) --
+// Cada apartado tiene su propio título, breve descripción y fotos (ver
+// src/lib/collections.js para la categoría de fotos que usa cada uno). Si
+// todavía no ha creado ninguno, `collections` llega vacío y la página no
+// enseña apartados de mentira (misma regla que las fotos, ver `photosOr`).
+export function useCollections() {
+  const { data, loading } = useQuery('collections:published', () =>
+    restGet('collections?select=*&published=eq.true&order=sort_order.asc,created_at.asc')
+  )
+  return { collections: data, loading }
+}
+
 // ---- Eventos próximos (no caducados) ---------------------------------------
 export function useEvents() {
   const { data, loading } = useQuery('events:upcoming', () =>
@@ -183,6 +195,7 @@ function mergeBusiness(row) {
     tagline: pick(row.tagline, site.tagline),
     phoneHuman: pick(row.phone_human, site.phoneHuman),
     phoneTel: pick(row.phone_tel, site.phoneTel),
+    phoneMobileHuman: pick(row.phone_mobile_human, site.phoneMobileHuman),
     whatsapp: pick(row.whatsapp, site.whatsapp),
     whatsappMessage: pick(row.whatsapp_message, site.whatsappMessage),
     email: pick(row.email, site.email),

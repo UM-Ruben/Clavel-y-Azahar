@@ -23,13 +23,8 @@ describe('configuración de la galería', () => {
     }
   })
 
-  it('deja crecer las colecciones y fija doce elementos iniciales', () => {
-    const collections = GALLERY_SECTIONS.filter((section) => section.group === 'Colecciones')
-    expect(collections).toHaveLength(3)
-    for (const section of collections) {
-      expect(section.initialVisible).toBe(12)
-      expect(canAddPhoto(section, 500)).toBe(true)
-    }
+  it('ya no fija los apartados de Colecciones aquí (son dinámicos, ver src/lib/collections.js)', () => {
+    expect(GALLERY_SECTIONS.some((section) => section.group === 'Colecciones')).toBe(false)
   })
 
   it('mantiene las mismas zonas y límites en la validación de Supabase', () => {

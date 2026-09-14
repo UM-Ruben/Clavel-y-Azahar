@@ -38,12 +38,17 @@ test('el texto del servicio queda debajo de la imagen en móvil', async ({ page,
 test('las colecciones muestran doce fotos y amplían la cuadrícula al pedirlo', async ({ page }) => {
   await page.route('https://test.supabase.co/rest/v1/**', async (route) => {
     const url = decodeURIComponent(route.request().url())
-    if (url.includes('photos?') && url.includes('category=eq.colecciones_temporada')) {
+    if (url.includes('collections?')) {
+      const collections = [
+        { id: 'temporada-1', title: 'Ramos de Temporada', description: 'Ramos de cada estación.', sort_order: 0, published: true },
+      ]
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(collections) })
+    }
+    if (url.includes('photos?') && url.includes('category=eq.coleccion_temporada-1')) {
       const photos = Array.from({ length: 13 }, (_, index) => ({
         id: `photo-${index}`,
-        category: 'colecciones_temporada',
+        category: 'coleccion_temporada-1',
         image_url: '/demo/colecciones-temporada-pradera-silvestre.jpg',
-        title: `Ramo ${index + 1}`,
         alt: `Ramo de prueba ${index + 1}`,
         sort_order: index,
         published: true,

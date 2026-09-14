@@ -11,6 +11,7 @@ import { useAuth } from './useAuth'
 import Login from './Login'
 import { ToastProvider } from './components/Toast'
 import GalleryAdmin from './sections/GalleryAdmin'
+import CollectionsAdmin from './sections/CollectionsAdmin'
 import EventsAdmin from './sections/EventsAdmin'
 import TextsAdmin from './sections/TextsAdmin'
 import BusinessAdmin from './sections/BusinessAdmin'
@@ -18,6 +19,7 @@ import Logo from '../components/Logo'
 
 const TABS = [
   { key: 'galeria', label: 'Galería', icon: 'image', Component: GalleryAdmin },
+  { key: 'colecciones', label: 'Colecciones', icon: 'photo_library', Component: CollectionsAdmin },
   { key: 'eventos', label: 'Eventos', icon: 'event', Component: EventsAdmin },
   { key: 'textos', label: 'Textos', icon: 'edit_note', Component: TextsAdmin },
   { key: 'negocio', label: 'Datos del negocio', icon: 'storefront', Component: BusinessAdmin },

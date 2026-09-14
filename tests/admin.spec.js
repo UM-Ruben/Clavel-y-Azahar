@@ -23,7 +23,7 @@ test('una sesión válida abre la galería y permite elegir todas las zonas', as
   await authenticated(page)
   await page.goto('/admin')
   await expect(page.getByRole('heading', { name: 'Imagen principal', exact: true })).toBeVisible()
-  for (const zone of ['Destacados del escaparate', 'Ramos de Temporada', 'Centros de Mesa', 'Plantas Exóticas', 'Imagen de cabecera', 'Foto de Bodas y Eventos', 'Foto de Talleres', 'Foto de la tienda']) {
+  for (const zone of ['Destacados del escaparate', 'Imagen de cabecera', 'Foto de Bodas y Eventos', 'Foto de Talleres', 'Foto de la tienda']) {
     await page.getByRole('button', { name: zone, exact: true }).click()
     await expect(page.getByRole('heading', { name: zone, exact: true })).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)

@@ -25,9 +25,9 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   const socials = [
-    { key: 'instagram', url: site.social.instagram, label: 'Instagram', Icon: InstagramIcon, placeholder: 'tu_floristeria' },
-    { key: 'facebook', url: site.social.facebook, label: 'Facebook', Icon: FacebookIcon, placeholder: 'tu_floristeria' },
-  ].filter((s) => s.url && !s.url.includes(s.placeholder))
+    { key: 'instagram', url: site.social.instagram, label: 'Instagram', Icon: InstagramIcon },
+    { key: 'facebook', url: site.social.facebook, label: 'Facebook', Icon: FacebookIcon },
+  ].filter((s) => s.url)
 
   return (
     <footer className="bg-surface-container-low w-full pt-16 pb-10 border-t border-outline-variant/50">
@@ -105,6 +105,18 @@ export default function Footer() {
                 href={`tel:${site.phoneTel}`}
               >
                 {site.phoneHuman}
+              </a>
+              <a
+                className="block hover:text-primary transition-colors font-body-md text-body-md"
+                href={`tel:+${String(site.whatsapp).replace(/\D/g, '')}`}
+              >
+                {site.phoneMobileHuman}
+              </a>
+              <a
+                className="block hover:text-primary transition-colors font-body-md text-sm break-all"
+                href={`mailto:${site.email}`}
+              >
+                {site.email}
               </a>
               <p className="font-body-md text-body-md text-sm opacity-80">
                 {site.hours[0].days}: {site.hours[0].time}

@@ -66,7 +66,20 @@ function Photo({ src, className, crop }) {
   )
 }
 
-function variant(key, img, { title, desc, badge } = {}, device = 'desktop', crop = null) {
+function variant(key, img, { title, desc } = {}, device = 'desktop', crop = null) {
+  // Apartados de "Nuestras Colecciones": la dueña los crea libremente, así que
+  // comparten una única vista previa (foto + título/descripción del apartado,
+  // no por foto). Ver src/lib/collections.js para la convención de la clave.
+  if (key.startsWith('coleccion_')) {
+    return (
+      <div className="w-36">
+        <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-low">
+          <Photo src={img} crop={crop} className="w-full h-full object-cover" />
+        </div>
+      </div>
+    )
+  }
+
   switch (key) {
     case 'inicio_hero':
       return (
@@ -87,44 +100,6 @@ function variant(key, img, { title, desc, badge } = {}, device = 'desktop', crop
           </div>
           <p className="font-headline text-base text-primary truncate">{title || 'Título del ramo'}</p>
           {desc ? <p className="text-on-surface-variant text-[11px] mt-0.5 line-clamp-2">{desc}</p> : null}
-        </div>
-      )
-
-    case 'colecciones_temporada':
-      return (
-        <div className="w-36">
-          <div className="relative aspect-[4/5] overflow-hidden bg-surface-container-low mb-2">
-            <Photo src={img} crop={crop} className="w-full h-full object-cover" />
-            {badge ? (
-              <div className="absolute top-2 right-2 bg-[#fecbcb] text-[#061b0e] text-[9px] font-semibold px-2 py-1 rounded-xl">
-                {badge}
-              </div>
-            ) : null}
-          </div>
-          <p className="font-headline-md text-sm text-primary text-center">{title || 'Título de la colección'}</p>
-        </div>
-      )
-
-    case 'colecciones_centros':
-      return (
-        <div className="w-64 flex gap-3 items-center bg-surface-container-low p-3 rounded-DEFAULT border-[0.5px] border-outline-variant">
-          <div className="relative w-1/2 aspect-square overflow-hidden shrink-0">
-            <Photo src={img} crop={crop} className="w-full h-full object-cover" />
-          </div>
-          <div className="w-1/2 min-w-0">
-            <p className="font-headline-md text-sm text-primary mb-1 truncate">{title || 'Nombre del centro'}</p>
-            {desc ? <p className="text-on-surface-variant text-[10px] line-clamp-3">{desc}</p> : null}
-          </div>
-        </div>
-      )
-
-    case 'colecciones_exoticas':
-      return (
-        <div className="w-28 text-center">
-          <div className="relative aspect-square overflow-hidden rounded-full border border-outline-variant mb-2 mx-auto w-4/5">
-            <Photo src={img} crop={crop} className="w-full h-full object-cover" />
-          </div>
-          <p className="font-body-lg text-sm text-primary font-semibold truncate">{title || 'Nombre de la planta'}</p>
         </div>
       )
 

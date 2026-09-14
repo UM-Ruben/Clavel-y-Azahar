@@ -1,5 +1,8 @@
 import { supabase, MEDIA_BUCKET, STAGING_BUCKET, HISTORY_BUCKET } from '../lib/supabase'
 import { invalidate } from '../lib/content'
+import { collectionCategory } from '../lib/collections'
+
+export { collectionCategory }
 
 function check() {
   if (!supabase) throw new Error('Supabase no está configurado.')
@@ -255,6 +258,86 @@ export async function saveContent(key, value) {
     .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' })
   if (error) throw error
   invalidate(`content:${key}`)
+}
+
+// ---- APARTADOS DE "NUESTRAS COLECCIONES" ------------------------------------
+// La dueña crea tantos apartados como quiera, cada uno con su título, su
+// breve descripción y sus fotos. Las fotos comparten el mismo mecanismo de
+// zonas de siempre (ver PhotoZoneEditor), bajo la categoría que calcula
+// collectionCategory(id). El propio apartado (título/descripción/orden) es
+// una fila normal en `collections`, protegida por RLS (política
+// "collections_owner_all" en el esquema), así que se lee y escribe
+// directamente con el cliente de Supabase, sin necesidad de RPC.
+export async function listCollections() {
+  check()
+  const { data, error } = await supabase
+    .from('collections')
+    .select('*')
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true })
+  if (error) throw error
+  return data ?? []
+}
+
+export async function createCollection() {
+  check()
+  const { data: last, error: lastError } = await supabase
+    .from('collections').select('sort_order').order('sort_order', { ascending: false }).limit(1)
+  if (lastError) throw lastError
+  const sort_order = last && last.length ? last[0].sort_order + 1 : 0
+  const { data, error } = await supabase
+    .from('collections')
+    .insert({ title: 'Nuevo apartado', description: '', sort_order, published: true })
+    .select().single()
+  if (error) throw error
+  invalidate('collections')
+  return data
+}
+
+export async function updateCollection(collection, fields) {
+  check()
+  const { data, error } = await supabase
+    .from('collections')
+    .update({ ...fields, updated_at: new Date().toISOString() })
+    .eq('id', collection.id)
+    .select().single()
+  if (error) throw error
+  invalidate('collections')
+  return data
+}
+
+// Reordena guardando la posición (0, 1, 2…) de cada apartado en el orden dado.
+// No hace falta una transacción atómica: solo la dueña edita esto, y un fallo
+// a mitad de camino como mucho deja un orden provisional que se corrige
+// recargando la lista.
+export async function reorderCollections(orderedCollections) {
+  check()
+  const results = await Promise.all(
+    orderedCollections.map((collection, index) =>
+      supabase.from('collections').update({ sort_order: index }).eq('id', collection.id)
+    )
+  )
+  const failed = results.find((result) => result.error)
+  if (failed) throw failed.error
+  invalidate('collections')
+  return orderedCollections.map((collection, index) => ({ ...collection, sort_order: index }))
+}
+
+// Borra el apartado y, de paso, envía sus fotos a la papelera (se limpian
+// solas del almacenamiento a los 30 días, igual que el resto de fotos
+// retiradas). Si alguna foto falla al retirarse no bloquea el borrado del
+// apartado: quedaría huérfana pero invisible, ya que nada vuelve a pedir
+// fotos de una categoría de un apartado que ya no existe.
+export async function deleteCollection(collection) {
+  check()
+  const category = collectionCategory(collection.id)
+  let photos = []
+  try { photos = await listPhotos(category) } catch { photos = [] }
+  await Promise.allSettled(photos.map((photo) => removePhoto(photo)))
+  const { error } = await supabase.from('collections').delete().eq('id', collection.id)
+  if (error) throw error
+  invalidate('collections')
+  invalidate(`photos:${category}`)
 }
 
 // ---- NEGOCIO ---------------------------------------------------------------
