@@ -9,7 +9,7 @@
 ## 0. Panel de gestión de la dueña (NUEVO)
 
 La dueña ya puede editar **fotos, eventos, textos y datos del negocio** desde el
-panel privado en `/admin`, sin tocar código. Para activarlo hay que conectar
+panel privado en `/naniPanel`, sin tocar código. Para activarlo hay que conectar
 Supabase una sola vez: ver **[SETUP_PANEL.md](./SETUP_PANEL.md)**.
 
 > ⚠️ **Aviso SEO (importante):** el panel actualiza lo que se VE en la web

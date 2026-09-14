@@ -1,4 +1,4 @@
-// Punto de entrada de la ruta /admin. Carga el panel de forma diferida (lazy)
+// Punto de entrada del panel privado. Carga el panel de forma diferida (lazy)
 // para que su código NO forme parte del paquete de la web pública.
 import { lazy, Suspense } from 'react'
 

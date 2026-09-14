@@ -2,8 +2,13 @@ project_id = "floristeria"
 
 [auth]
 enable_signup = false
-site_url = "http://localhost:5173"
-additional_redirect_urls = ["http://localhost:5173/admin", "http://127.0.0.1:5173/admin"]
+site_url = "https://www.clavelyazahar.es"
+additional_redirect_urls = [
+  "https://www.clavelyazahar.es/naniPanel",
+  "https://clavelyazahar.es/naniPanel",
+  "http://localhost:5173/naniPanel",
+  "http://127.0.0.1:5173/naniPanel",
+]
 
 [auth.email]
 enable_signup = false

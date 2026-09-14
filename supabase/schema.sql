@@ -168,11 +168,11 @@ create table if not exists public.admin_users (
 );
 alter table public.admin_users enable row level security;
 
--- Al aplicar la migración a un proyecto que ya tiene la cuenta de la dueña,
--- registra como propietaria la cuenta más antigua. No concede permisos a
--- cuentas futuras.
+-- Solo el correo fijo de la tienda puede convertirse en propietario.
 insert into public.admin_users (user_id)
-select id from auth.users order by created_at asc limit 1
+select id from auth.users
+where lower(email) = 'entreramblasclavelyazahar@gmail.com'
+order by created_at asc limit 1
 on conflict (user_id) do nothing;
 
 create or replace function public.is_admin()
@@ -182,7 +182,9 @@ stable
 security definer
 set search_path = public, pg_temp
 as $$
-  select exists(select 1 from public.admin_users where user_id = auth.uid());
+  select
+    lower(coalesce(auth.jwt() ->> 'email', '')) = 'entreramblasclavelyazahar@gmail.com'
+    and exists(select 1 from public.admin_users where user_id = auth.uid());
 $$;
 revoke all on function public.is_admin() from public;
 grant execute on function public.is_admin() to anon, authenticated;
@@ -195,10 +197,11 @@ set search_path = public, pg_temp
 as $$
 begin
   if auth.uid() is null then return false; end if;
-  perform pg_advisory_xact_lock(hashtext('claim_initial_admin'));
-  if not exists(select 1 from public.admin_users) then
-    insert into public.admin_users(user_id) values (auth.uid()) on conflict do nothing;
+  if lower(coalesce(auth.jwt() ->> 'email', '')) <> 'entreramblasclavelyazahar@gmail.com' then
+    return false;
   end if;
+  perform pg_advisory_xact_lock(hashtext('claim_initial_admin'));
+  insert into public.admin_users(user_id) values (auth.uid()) on conflict do nothing;
   return public.is_admin();
 end;
 $$;

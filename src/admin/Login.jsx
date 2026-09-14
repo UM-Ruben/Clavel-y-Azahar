@@ -1,11 +1,11 @@
-// Pantalla de inicio de sesión del panel. Email + contraseña de la dueña.
-// Incluye «¿Has olvidado la contraseña?» (envía email de recuperación).
+// Pantalla de inicio de sesión del panel. El email de la dueña es fijo:
+// ni el inicio de sesión ni la recuperación aceptan otro destinatario.
 import { useState } from 'react'
 import { isSupabaseConfigured } from '../lib/supabase'
 import Logo from '../components/Logo'
+import { ADMIN_EMAIL } from '../config/admin'
 
 export default function Login({ onSignIn, onReset }) {
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [status, setStatus] = useState('idle') // idle | sending | error
   const [message, setMessage] = useState('')
@@ -15,7 +15,7 @@ export default function Login({ onSignIn, onReset }) {
     setStatus('sending')
     setMessage('')
     try {
-      await onSignIn(email.trim(), password)
+      await onSignIn(password)
       // Si va bien, useAuth detecta la sesión y AdminApp muestra el panel.
     } catch (err) {
       setStatus('error')
@@ -24,13 +24,10 @@ export default function Login({ onSignIn, onReset }) {
   }
 
   async function reset() {
-    if (!email.trim()) {
-      setStatus('error')
-      setMessage('Escribe tu email arriba y vuelve a pulsar para recibir el enlace.')
-      return
-    }
+    setStatus('sending')
+    setMessage('')
     try {
-      await onReset(email.trim())
+      await onReset()
       setStatus('idle')
       setMessage('Te hemos enviado un email para restablecer la contraseña.')
     } catch {
@@ -68,10 +65,10 @@ export default function Login({ onSignIn, onReset }) {
                 id="login-email"
                 type="email"
                 autoComplete="username"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-elegant bg-transparent w-full py-2 font-body-md text-body-md text-on-surface"
+                value={ADMIN_EMAIL}
+                readOnly
+                aria-readonly="true"
+                className="input-elegant bg-surface-container-low w-full py-2 font-body-md text-body-md text-on-surface-variant cursor-not-allowed"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -106,7 +103,8 @@ export default function Login({ onSignIn, onReset }) {
             <button
               type="button"
               onClick={reset}
-              className="text-sm text-on-surface-variant hover:text-primary transition-colors underline-offset-2 hover:underline"
+              disabled={status === 'sending'}
+              className="text-sm text-on-surface-variant hover:text-primary transition-colors underline-offset-2 hover:underline disabled:opacity-60 disabled:cursor-not-allowed"
             >
               ¿Has olvidado la contraseña?
             </button>
@@ -119,7 +117,7 @@ export default function Login({ onSignIn, onReset }) {
 
 function traducirError(err) {
   const msg = (err?.message || '').toLowerCase()
-  if (msg.includes('invalid login')) return 'Email o contraseña incorrectos.'
+  if (msg.includes('invalid login')) return 'Contraseña incorrecta.'
   if (msg.includes('email not confirmed')) return 'La cuenta aún no está confirmada.'
   return 'No se ha podido iniciar sesión. Revisa los datos e inténtalo de nuevo.'
 }

@@ -15,9 +15,9 @@ Web de **Clavel y Azahar** (eslogan «El nuevo aroma de Entrerramblas»), floris
 
 ---
 
-## 🔐 Panel de gestión de la dueña (`/admin`)
+## 🔐 Panel de gestión de la dueña (`/naniPanel`)
 
-La web incluye un panel privado en **`/admin`** para que la dueña suba fotos, cree
+La web incluye un panel privado en **`/naniPanel`** para que la dueña suba fotos, cree
 eventos y edite textos y datos del negocio **sin tocar código**. La web pública
 sigue siendo estática y rápida; el contenido editable se carga de la base de datos
 y, si aún no hay nada, se muestran los valores de ejemplo (la web nunca se rompe).

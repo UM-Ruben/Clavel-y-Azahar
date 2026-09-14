@@ -9,6 +9,7 @@ import Contacto from './pages/Contacto'
 import Eventos from './pages/Eventos'
 import AdminRoute from './admin/AdminRoute'
 import DemoLayout from './pages/demo/DemoLayout'
+import { ADMIN_PATH } from './config/admin'
 
 function Layout() {
   return (
@@ -42,7 +43,7 @@ export const routes = [
   // Se renderiza en el cliente (lazy); en el build solo se prerenderiza su
   // pantalla de carga. Bloqueado en robots.txt y marcado noindex.
   {
-    path: '/admin',
+    path: ADMIN_PATH,
     element: <AdminRoute />,
     entry: 'src/admin/AdminRoute.jsx',
   },

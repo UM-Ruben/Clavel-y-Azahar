@@ -4,7 +4,7 @@
 //  La dueña crea, desde el panel, tantos apartados como quiera en la página
 //  Colecciones (cada uno con su título, su breve descripción y sus fotos). Las
 //  fotos de cada apartado se guardan en la tabla `photos` de siempre, bajo una
-//  categoría derivada del id del apartado. Esta función vive fuera de /admin
+//  categoría derivada del id del apartado. Esta función vive fuera del panel
 //  porque también la usa la web pública (ver src/pages/Colecciones.jsx).
 // ============================================================================
 export function collectionCategory(collectionId) {

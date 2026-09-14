@@ -21,7 +21,7 @@ test('una sesión caducada que no responde no deja Cargando indefinidamente', as
 
 test('una respuesta antigua no concede permisos después de cerrar sesión', async () => {
   let resolveOwner
-  mock.getSession.mockResolvedValue({ data: { session: { user: { id: 'owner' } } } })
+  mock.getSession.mockResolvedValue({ data: { session: { user: { id: 'owner', email: 'entreramblasclavelyazahar@gmail.com' } } } })
   mock.rpc.mockReturnValue(new Promise((resolve) => { resolveOwner = resolve }))
   const { result } = renderHook(() => useAuth())
   await waitFor(() => expect(mock.rpc).toHaveBeenCalled())

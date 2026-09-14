@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { ADMIN_EMAIL, ADMIN_PATH, isAuthorizedAdminEmail } from '../config/admin'
 
 const CONNECTION_ERROR = 'No se ha podido conectar con Supabase. Comprueba la conexión y vuelve a intentarlo.'
 
@@ -49,7 +50,9 @@ export function useAuth() {
         const next = await withAuthTimeout(pendingSession)
         if (disposed || current !== generation) return
         setSession(next)
-        const owner = next ? await withAuthTimeout(checkOwner()) : false
+        const owner = next && isAuthorizedAdminEmail(next.user?.email)
+          ? await withAuthTimeout(checkOwner())
+          : false
         if (!disposed && current === generation) setIsOwner(owner)
       } catch (error) {
         if (!disposed && current === generation) setAuthError(error.message || CONNECTION_ERROR)
@@ -71,9 +74,9 @@ export function useAuth() {
     return () => { disposed = true; generation++; sub.subscription.unsubscribe() }
   }, [attempt])
 
-  async function signIn(email, password) {
+  async function signIn(password) {
     if (!supabase) throw new Error('Supabase no está configurado.')
-    const { error } = await withAuthTimeout(supabase.auth.signInWithPassword({ email, password }))
+    const { error } = await withAuthTimeout(supabase.auth.signInWithPassword({ email: ADMIN_EMAIL, password }))
     if (error) throw error
   }
 
@@ -90,10 +93,10 @@ export function useAuth() {
     } catch { setAuthError(CONNECTION_ERROR) }
   }
 
-  async function resetPassword(email) {
+  async function resetPassword() {
     if (!supabase) throw new Error('Supabase no está configurado.')
-    const redirectTo = `${window.location.origin}/admin`
-    const { error } = await withAuthTimeout(supabase.auth.resetPasswordForEmail(email, { redirectTo }))
+    const redirectTo = `${window.location.origin}${ADMIN_PATH}`
+    const { error } = await withAuthTimeout(supabase.auth.resetPasswordForEmail(ADMIN_EMAIL, { redirectTo }))
     if (error) throw error
   }
 

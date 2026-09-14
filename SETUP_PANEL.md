@@ -1,6 +1,6 @@
 # Cómo poner en marcha el panel de la dueña
 
-El panel privado (`/admin`) permite a la dueña subir fotos, crear eventos y editar
+El panel privado (`/naniPanel`) permite a la dueña subir fotos, crear eventos y editar
 textos y datos del negocio **sin tocar código**. Funciona con **Supabase** (gratis):
 guarda las fotos, los eventos y los textos, y controla quién puede entrar.
 
@@ -36,12 +36,11 @@ Tiempo estimado: **25–35 minutos**, una sola vez.
 ## 3. Crear la única cuenta de acceso
 
 1. Menú lateral → **Authentication** → **Users** → **Add user** → **Create new user**.
-2. Pon un **email** y una **contraseña** inicial. Marca «Auto confirm user» si
-   aparece. Crea el usuario.
-   - **No hace falta el correo privado de la dueña.** Ese email es solo el
-     *usuario* con el que se entra al panel y el buzón donde llegaría el correo de
-     «recuperar contraseña»; no se muestra en ninguna parte pública. **Usa el
-     correo de la tienda** (cualquier buzón que controléis vosotros).
+2. Usa exactamente **entreramblasclavelyazahar@gmail.com** y pon una contraseña
+   inicial. Marca «Auto confirm user» si aparece. Crea el usuario.
+   - Ese es el único correo que acepta el panel y el único destinatario de
+     «recuperar contraseña». Se muestra bloqueado y no puede cambiarse desde
+     el formulario de acceso.
 3. **Crea SOLO este usuario.** No añadas ninguno más: así ella es la única cuenta.
 4. **Importante (seguridad):** ve a **Authentication** → **Providers** (o
    **Sign In / Providers**) → **Email** y **desactiva** «Allow new users to sign up».
@@ -68,8 +67,8 @@ Tiempo estimado: **25–35 minutos**, una sola vez.
    VITE_SUPABASE_URL=https://abcdxyz.supabase.co
    VITE_SUPABASE_ANON_KEY=la_clave_anon_larga
    ```
-3. Arranca la web: `pnpm dev` y entra en <http://localhost:5173/admin>.
-   Inicia sesión con el email y la contraseña de la dueña.
+3. Arranca la web: `pnpm dev` y entra en <http://localhost:5173/naniPanel>.
+   Escribe la contraseña de la dueña; el correo ya aparece fijado.
 
 ## 6. Desplegar las funciones seguras de imágenes
 
@@ -101,7 +100,10 @@ ni en Vercel: solo pertenece a Supabase Cron.
 2. Añade las **mismas dos variables** (`VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`)
    con los mismos valores, para **Production** (y Preview si quieres).
 3. Vuelve a desplegar (**Deployments** → **Redeploy**) para que tomen efecto.
-4. El panel queda en `https://TU-DOMINIO/admin`.
+4. El panel queda en `https://TU-DOMINIO/naniPanel`.
+5. En **Supabase → Authentication → URL Configuration**, añade también
+   `https://TU-DOMINIO/naniPanel` a **Redirect URLs**. Sin este paso, los enlaces
+   de recuperación de contraseña no podrán regresar al panel publicado.
 
 ---
 
@@ -142,7 +144,7 @@ Los cambios se ven en la web **al instante**, sin necesidad de volver a desplega
   código** (los datos estructurados de `index.html`): el teléfono y la dirección
   que aparecen en la ficha de Google se mantienen ahí. Ver [`PENDIENTES.md`](./PENDIENTES.md).
 - Si la dueña olvida la contraseña, puede pulsar «¿Has olvidado la contraseña?»
-  en el login y recibirá un email para cambiarla.
+  y el enlace se enviará únicamente a **entreramblasclavelyazahar@gmail.com**.
 
 ## Copias y recuperación
 

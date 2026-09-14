@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 
-const user = { id: '11111111-1111-4111-8111-111111111111', aud: 'authenticated', role: 'authenticated', email: 'owner@example.test' }
+const ADMIN_PATH = '/naniPanel'
+const ADMIN_EMAIL = 'entreramblasclavelyazahar@gmail.com'
+const user = { id: '11111111-1111-4111-8111-111111111111', aud: 'authenticated', role: 'authenticated', email: ADMIN_EMAIL }
 const session = { access_token: 'test-token', refresh_token: 'test-refresh', expires_at: 4102444800, expires_in: 3600, token_type: 'bearer', user }
 
 async function authenticated(page, owner = true) {
@@ -14,14 +16,31 @@ async function authenticated(page, owner = true) {
 }
 
 test('el panel abre el formulario sin sesión', async ({ page }) => {
-  await page.goto('/admin')
-  await expect(page.getByLabel('Email', { exact: true })).toBeVisible()
+  await page.goto(ADMIN_PATH)
+  await expect(page.getByLabel('Email', { exact: true })).toHaveValue(ADMIN_EMAIL)
+  await expect(page.getByLabel('Email', { exact: true })).toHaveAttribute('readonly', '')
   await expect(page.getByRole('button', { name: 'Entrar', exact: true })).toBeEnabled()
+})
+
+test('la recuperación usa únicamente el correo fijo y vuelve al panel privado', async ({ page }) => {
+  let recoveryRequest
+  await page.route('**/auth/v1/recover**', async (route) => {
+    recoveryRequest = {
+      url: route.request().url(),
+      body: route.request().postDataJSON(),
+    }
+    await route.fulfill({ json: {} })
+  })
+  await page.goto(ADMIN_PATH)
+  await page.getByRole('button', { name: '¿Has olvidado la contraseña?' }).click()
+  await expect(page.getByRole('alert')).toContainText('Te hemos enviado un email')
+  expect(recoveryRequest.body.email).toBe(ADMIN_EMAIL)
+  expect(decodeURIComponent(recoveryRequest.url)).toContain(`redirect_to=http://127.0.0.1:4175${ADMIN_PATH}`)
 })
 
 test('una sesión válida abre la galería y permite elegir todas las zonas', async ({ page }) => {
   await authenticated(page)
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByRole('heading', { name: 'Imagen principal', exact: true })).toBeVisible()
   for (const zone of ['Destacados del escaparate', 'Imagen de cabecera', 'Foto de Bodas y Eventos', 'Foto de Talleres', 'Foto de la tienda']) {
     await page.getByRole('button', { name: zone, exact: true }).click()
@@ -32,7 +51,7 @@ test('una sesión válida abre la galería y permite elegir todas las zonas', as
 
 test('un usuario distinto no accede a la galería', async ({ page }) => {
   await authenticated(page, false)
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByRole('heading', { name: 'Cuenta sin acceso' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Elegir foto' })).toHaveCount(0)
 })
@@ -40,7 +59,7 @@ test('un usuario distinto no accede a la galería', async ({ page }) => {
 test('una migración pendiente se explica en vez de bloquear el acceso', async ({ page }) => {
   await authenticated(page)
   await page.route('**/rest/v1/rpc/is_admin', (route) => route.fulfill({ status: 404, json: { code: 'PGRST202', message: 'missing function' } }))
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByRole('alert')).toContainText('Falta actualizar el panel en Supabase')
   await expect(page.getByRole('button', { name: 'Reintentar' })).toBeVisible()
 })
@@ -52,7 +71,7 @@ test('una comprobación que no responde termina y permite reintentar', async ({ 
     if (blocked) await new Promise((resolve) => setTimeout(resolve, 12000))
     await route.fulfill({ json: true }).catch(() => {})
   })
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByRole('heading', { name: 'No se pudo abrir el panel' })).toBeVisible({ timeout: 15000 })
   blocked = false
   await page.getByRole('button', { name: 'Reintentar' }).click()
@@ -69,7 +88,7 @@ test('una foto real se recorta y un fallo al publicar conserva la foto anterior'
     return route.fulfill({ json: { Key: 'test' } })
   })
   await page.route('**/functions/v1/publish-photo', (route) => route.fulfill({ status: 500, json: { error: 'Storage unavailable' } }))
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByAltText('Vista previa de la foto publicada')).toBeVisible()
   await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
   await expect(page.getByRole('slider', { name: 'Acercar o alejar la foto' })).toBeVisible()
@@ -93,7 +112,7 @@ test('publicar JPEG espera al servidor y actualiza la fotografía', async ({ pag
     await new Promise((resolve) => { finishPublish = resolve })
     await route.fulfill({ json: { photo: published } })
   })
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByRole('button', { name: 'Elegir foto' })).toBeVisible()
   await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
   await expect(page.getByRole('slider')).toBeVisible()
@@ -110,7 +129,7 @@ test('publicar JPEG espera al servidor y actualiza la fotografía', async ({ pag
 
 test('la vista previa sigue el recorte y el zoom antes de publicar', async ({ page }) => {
   await authenticated(page)
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByRole('button', { name: 'Elegir foto' })).toBeVisible()
   await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
 
@@ -153,7 +172,7 @@ test('el historial muestra la versión actual y se refresca al reemplazarla', as
   await page.route('**/storage/v1/object/media-staging/**', (route) => route.fulfill({ json: { Key: 'test' } }))
   await page.route('**/functions/v1/publish-photo', (route) => route.fulfill({ json: { photo: updated } }))
 
-  await page.goto('/admin')
+  await page.goto(ADMIN_PATH)
   await expect(page.getByRole('button', { name: 'Historial y papelera (1)' })).toBeVisible()
   await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
   await page.getByRole('button', { name: 'Publicar', exact: true }).click()
