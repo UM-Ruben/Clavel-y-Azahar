@@ -24,7 +24,7 @@ export default function Colecciones() {
       />
       {/* Page header */}
       <div className="text-center mb-24">
-        <h1 className="font-display-lg text-display-lg text-primary mb-6">Nuestras Colecciones</h1>
+        <h1 className="font-headline text-4xl leading-tight text-primary mb-6 md:font-display-lg md:text-display-lg">Nuestras Colecciones</h1>
         <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto whitespace-pre-line">
           {intro}
         </p>
@@ -47,8 +47,8 @@ function CollectionSection({ collection }) {
 
   return (
     <section className="mb-section-gap last:mb-0">
-      <h2 className="font-headline-lg text-headline-lg text-primary mb-4 flex items-center gap-4">
-        {collection.title}
+      <h2 className="font-headline text-3xl leading-tight text-primary mb-4 flex min-w-0 items-center gap-4 md:font-headline-lg md:text-headline-lg">
+        <span className="min-w-0 break-words">{collection.title}</span>
         <span className="h-[0.5px] flex-grow bg-outline-variant" />
       </h2>
       {collection.description && (

@@ -19,14 +19,14 @@ export default function Navbar() {
         <NavLink
           to="/"
           aria-label={`${site.name} — Inicio`}
-          className="flex items-center gap-3 text-primary"
+          className="flex min-w-0 items-center gap-2 text-primary min-[360px]:gap-3"
         >
-          <Logo className="h-12 w-auto md:h-14 shrink-0" />
-          <span className="flex flex-col leading-tight">
-            <span className="font-headline text-xl md:text-2xl text-primary tracking-tight">
+          <Logo className="h-11 w-auto shrink-0 min-[360px]:h-12 md:h-14" />
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="font-headline text-lg text-primary tracking-tight min-[360px]:text-xl md:text-2xl">
               {site.name}
             </span>
-            <span className="font-body-md text-[9px] md:text-[10px] uppercase tracking-[0.15em] md:tracking-[0.18em] text-on-surface-variant whitespace-nowrap">
+            <span className="hidden font-body-md text-[9px] uppercase tracking-[0.15em] text-on-surface-variant whitespace-nowrap min-[360px]:block md:text-[10px] md:tracking-[0.18em]">
               {site.brand.slogan}
             </span>
           </span>
@@ -84,22 +84,14 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Enlaces en fila (móvil y tablet, por debajo de lg) */}
+      {/* En móvil el logotipo ya funciona como enlace de inicio. Los otros
+          cuatro destinos caben en una cuadrícula sin scroll horizontal. */}
       <div className="lg:hidden border-t border-outline-variant/60">
-        <div className="px-margin-mobile py-3 flex gap-5 overflow-x-auto text-sm text-on-surface-variant">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              isActive ? 'text-primary font-semibold whitespace-nowrap' : 'whitespace-nowrap'
-            }
-          >
-            Inicio
-          </NavLink>
+        <div className="grid grid-cols-4 px-2 text-center text-xs text-on-surface-variant min-[360px]:px-3 sm:px-margin-mobile sm:text-sm">
           <NavLink
             to="/colecciones"
             className={({ isActive }) =>
-              isActive ? 'text-primary font-semibold whitespace-nowrap' : 'whitespace-nowrap'
+              `flex min-h-11 items-center justify-center px-1 whitespace-nowrap ${isActive ? 'text-primary font-semibold' : ''}`
             }
           >
             Colecciones
@@ -107,7 +99,7 @@ export default function Navbar() {
           <NavLink
             to="/servicios"
             className={({ isActive }) =>
-              isActive ? 'text-primary font-semibold whitespace-nowrap' : 'whitespace-nowrap'
+              `flex min-h-11 items-center justify-center px-1 whitespace-nowrap ${isActive ? 'text-primary font-semibold' : ''}`
             }
           >
             Servicios
@@ -115,7 +107,7 @@ export default function Navbar() {
           <NavLink
             to="/eventos"
             className={({ isActive }) =>
-              isActive ? 'text-primary font-semibold whitespace-nowrap' : 'whitespace-nowrap'
+              `flex min-h-11 items-center justify-center px-1 whitespace-nowrap ${isActive ? 'text-primary font-semibold' : ''}`
             }
           >
             Eventos
@@ -123,7 +115,7 @@ export default function Navbar() {
           <NavLink
             to="/contacto"
             className={({ isActive }) =>
-              isActive ? 'text-primary font-semibold whitespace-nowrap' : 'whitespace-nowrap'
+              `flex min-h-11 items-center justify-center px-1 whitespace-nowrap ${isActive ? 'text-primary font-semibold' : ''}`
             }
           >
             Contacto

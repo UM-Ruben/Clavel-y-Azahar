@@ -24,3 +24,16 @@ index 5aa2603..c0328d1 100644
      "styled-components": "^6.0.0",
      "vite": "^6.4.0 || ^7.3.0 || ^8.0.0"
    },
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 82491f3..298a0a4 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -98,7 +98,7 @@ function ViteReactSSG(routerOptions, fn, options = {}) {
+   return createRoot;
+   function transformStaticLoaderRoute(route) {
+     const isSSR = document.querySelector("[data-server-rendered=true]") !== null;
+-    if (!isSSR) {
++    if (!isSSR || !route.loader) {
+       return route;
+     }
+     const loader = async ({ request }) => {

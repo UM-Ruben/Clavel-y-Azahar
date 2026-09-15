@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ninguna sección pública debe ampliar el lienzo más allá del móvil. */
+html,
+body,
+#root {
+  max-width: 100%;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
 /* Material Symbols */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
