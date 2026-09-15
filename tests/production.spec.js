@@ -6,6 +6,15 @@ test.beforeEach(async ({ page }) => {
   await page.route('https://test.supabase.co/**', (route) => route.fulfill({ json: [] }))
 })
 
+test('la página 404 conserva el diseño y ofrece una salida clara', async ({ page }) => {
+  const response = await page.goto('/404.html')
+  expect(response?.status()).toBe(200)
+  await expect(page).toHaveTitle('Página no encontrada | Clavel y Azahar')
+  await expect(page.getByRole('heading', { name: 'Esta página no ha florecido' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Volver al inicio', exact: true })).toHaveAttribute('href', '/')
+  await expect(page.getByRole('link', { name: 'Ir a contacto' })).toHaveAttribute('href', '/contacto')
+})
+
 for (const width of [320, 375, 768, 1024, 1440]) {
   test(`la compilación publicada no duplica ni desborda el contenido a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 })

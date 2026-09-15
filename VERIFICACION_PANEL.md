@@ -11,7 +11,7 @@
 
 - 14 pruebas unitarias: configuración de zonas, procesamiento, seguridad y estados de autenticación.
 - 30 pruebas de navegador aprobadas; 2 omitidas por corresponder a otro dispositivo.
-- 5 pruebas adicionales sobre la compilación final verifican una sola raíz renderizada y ausencia de desbordamiento horizontal a 320, 375, 768, 1024 y 1440 px.
+- 6 pruebas adicionales sobre la compilación final verifican el 404 de marca, una sola raíz renderizada y ausencia de desbordamiento horizontal a 320, 375, 768, 1024 y 1440 px.
 - Inicio, colecciones, servicios, contacto y eventos: revisión a 375, 768, 1024 y 1440 px con contenido publicado simulado únicamente dentro de las pruebas. Se comprueban imágenes cargadas, intersecciones entre sus rectángulos y desbordamiento horizontal.
 - Panel en móvil y escritorio: formulario, todas las zonas, denegación a otra cuenta, migración ausente, espera agotada y reintento.
 - Un JPEG real pasa por el selector y el recortador del navegador; la interfaz espera la respuesta de publicación. Un fallo conserva la foto anterior.
