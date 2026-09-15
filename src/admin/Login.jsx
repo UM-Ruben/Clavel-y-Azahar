@@ -50,10 +50,17 @@ export default function Login({ onSignIn, onReset }) {
         {!isSupabaseConfigured ? (
           <div className="bg-error-container text-on-error-container rounded-lg p-5 text-sm">
             <p className="font-semibold mb-1">Falta configurar Supabase</p>
-            <p>
-              Añade <code>VITE_SUPABASE_URL</code> y <code>VITE_SUPABASE_ANON_KEY</code> en el archivo
-              <code> .env.local</code> y reinicia. Tienes los pasos en <code>SETUP_PANEL.md</code>.
-            </p>
+            {import.meta.env.PROD ? (
+              <p>
+                Añade <code>VITE_SUPABASE_URL</code> y <code>VITE_SUPABASE_ANON_KEY</code> en las variables
+                de entorno de Vercel y vuelve a desplegar la web.
+              </p>
+            ) : (
+              <p>
+                Añade <code>VITE_SUPABASE_URL</code> y <code>VITE_SUPABASE_ANON_KEY</code> en el archivo
+                <code> .env.local</code> y reinicia. Tienes los pasos en <code>SETUP_PANEL.md</code>.
+              </p>
+            )}
           </div>
         ) : (
           <form onSubmit={submit} className="bg-surface-container-lowest border border-outline-variant rounded-xl p-7 shadow-sm flex flex-col gap-5">
