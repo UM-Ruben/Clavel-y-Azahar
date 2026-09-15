@@ -4,9 +4,9 @@ El panel privado (`/naniPanel`) permite a la dueña subir fotos, crear eventos y
 textos y datos del negocio **sin tocar código**. Funciona con **Supabase** (gratis):
 guarda las fotos, los eventos y los textos, y controla quién puede entrar.
 
-> Mientras no completes estos pasos, **la web sigue funcionando igual que ahora**
-> (con las fotos y textos de ejemplo). El panel mostrará un aviso de «falta
-> configurar Supabase». No se rompe nada.
+> Mientras no completes estos pasos, la web conserva los textos iniciales y
+> muestra huecos neutros donde falten fotografías. El panel mostrará un aviso
+> de «falta configurar Supabase» y nunca publicará fotos de muestra.
 
 Tiempo estimado: **25–35 minutos**, una sola vez.
 
@@ -116,10 +116,8 @@ ni en Vercel: solo pertenece a Supabase Cron.
   WebP y HEIC de iPhone hasta 20 MB. La imagen publicada no cambia hasta pulsar
   **Publicar** y, si algo falla, la anterior permanece visible. Las versiones
   retiradas o sustituidas se pueden restaurar durante 30 días. Si una zona
-  se queda sin fotos, esa parte de la web muestra un
-  hueco neutro, nunca una foto de mentira (para ver el diseño ya «relleno» de
-  fotos de ejemplo, arranca `pnpm dev` y entra en `/demo` — esa vista no existe
-  en la web publicada).
+  se queda sin fotos, esa parte de la web muestra un hueco neutro. Las fotos
+  reales se cargan exclusivamente desde el panel.
 - **Colecciones**: la página "Nuestras Colecciones" no tiene apartados fijos —
   la dueña crea, borra y reordena los que quiera, cada uno con su título, su
   breve descripción y sus propias fotos (mismo editor que en Galería). Si no

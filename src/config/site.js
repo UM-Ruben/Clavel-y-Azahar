@@ -74,7 +74,7 @@ export const site = {
   // Pega el endpoint de tu servicio de formularios (sin backend):
   //   · Formspree:  https://formspree.io/f/XXXXXXXX
   //   · Web3Forms:  https://api.web3forms.com/submit  (y access_key abajo)
-  // Mientras valga el placeholder, el formulario funciona en modo demo.
+  // Mientras valga el placeholder, el formulario avisa de que no está activo.
   formEndpoint: 'https://formspree.io/f/TU_ID_FORMULARIO', // TODO: ver PENDIENTES.md
 }
 

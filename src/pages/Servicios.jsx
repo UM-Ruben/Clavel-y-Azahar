@@ -3,31 +3,24 @@ import { site } from '../config/site'
 import Seo from '../components/Seo'
 import { usePhotos, firstPhotoUrl, firstPhotoAlt, useContent, useEvents } from '../lib/content'
 import { textDefaults, subscriptionsDefault } from '../lib/textDefaults'
-import { useDemoMode } from '../lib/demoMode'
 import EmptyPhoto from '../components/EmptyPhoto'
 import SmartImage from '../components/SmartImage'
 import { getGallerySection } from '../config/gallery'
 
-// Imágenes por defecto de las secciones (se usan si la dueña no sube las
-// suyas), autoalojadas en /public/demo (ver nota en Inicio.jsx).
-const SERVICIOS_HERO_IMG = '/demo/servicios-hero.jpg'
-const SERVICIOS_BODAS_IMG = '/demo/servicios-bodas.jpg'
-const SERVICIOS_TALLER_IMG = '/demo/servicios-taller.jpg'
 const HERO_ASPECT = getGallerySection('servicios_hero').aspect
 const BODAS_ASPECT = getGallerySection('servicios_bodas').aspect
 const TALLER_ASPECT = getGallerySection('servicios_taller').aspect
 
 export default function Servicios() {
-  const demoMode = useDemoMode()
   const { photos: heroDb } = usePhotos('servicios_hero')
   const { photos: bodasDb, loading: bodasLoading } = usePhotos('servicios_bodas')
   const { photos: tallerDb, loading: tallerLoading } = usePhotos('servicios_taller')
-  const heroImg = firstPhotoUrl(heroDb, SERVICIOS_HERO_IMG, demoMode)
-  const bodasImg = firstPhotoUrl(bodasDb, SERVICIOS_BODAS_IMG, demoMode)
-  const tallerImg = firstPhotoUrl(tallerDb, SERVICIOS_TALLER_IMG, demoMode)
-  const heroAlt = firstPhotoAlt(heroDb, 'Instalación floral para bodas y eventos', demoMode)
-  const bodasAlt = firstPhotoAlt(bodasDb, 'Decoración floral para mesa de banquete de boda', demoMode)
-  const tallerAlt = firstPhotoAlt(tallerDb, 'Taller de arte floral en nuestro estudio', demoMode)
+  const heroImg = firstPhotoUrl(heroDb)
+  const bodasImg = firstPhotoUrl(bodasDb)
+  const tallerImg = firstPhotoUrl(tallerDb)
+  const heroAlt = firstPhotoAlt(heroDb, 'Instalación floral para bodas y eventos')
+  const bodasAlt = firstPhotoAlt(bodasDb, 'Decoración floral para mesa de banquete de boda')
+  const tallerAlt = firstPhotoAlt(tallerDb, 'Taller de arte floral en nuestro estudio')
   const heroTitulo = useContent('servicios_hero_titulo', textDefaults.servicios_hero_titulo)
   const heroTexto = useContent('servicios_hero_texto', textDefaults.servicios_hero_texto)
   const bodasTexto = useContent('servicios_bodas_texto', textDefaults.servicios_bodas_texto)

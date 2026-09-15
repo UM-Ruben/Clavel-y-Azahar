@@ -297,6 +297,7 @@ begin
   return v_id;
 end;
 $$;
+
 revoke all on function public.save_photo_revision(public.photos, text) from public;
 
 create or replace function public.publish_photo(
@@ -773,4 +774,25 @@ begin
   end loop;
 end;
 $$;
+
+-- Una instalación actualizada nunca publica las antiguas fotos de muestra.
+update public.content
+set value = (
+  select jsonb_agg(
+    case
+      when item->>'img' like '/demo/%' then
+        (item - 'image_path' - 'original_path') || jsonb_build_object('img', '')
+      else item
+    end
+    order by position
+  )
+  from jsonb_array_elements(value) with ordinality as cards(item, position)
+)
+where key = 'servicios_suscripciones'
+  and jsonb_typeof(value) = 'array'
+  and exists (
+    select 1
+    from jsonb_array_elements(value) as card(item)
+    where item->>'img' like '/demo/%'
+  );
 

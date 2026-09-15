@@ -3,50 +3,21 @@ import { site } from '../config/site'
 import Seo from '../components/Seo'
 import { usePhotos, photosOr, firstPhotoUrl, firstPhotoAlt, useContent } from '../lib/content'
 import { textDefaults } from '../lib/textDefaults'
-import { useDemoMode } from '../lib/demoMode'
 import EmptyGallery from '../components/EmptyGallery'
 import SmartImage from '../components/SmartImage'
 import { getGallerySection } from '../config/gallery'
 
-// Imagen por defecto del hero (se usa si la dueña no ha subido la suya).
-// Autoalojadas en /public/demo — antes enlazaban a lh3.googleusercontent.com/
-// aida-public/... (previsualizaciones internas de la IA que generó la
-// plantilla), que no son estables para uso público: podían devolver una
-// imagen distinta o completamente ajena en cada carga.
-const INICIO_HERO_IMG = '/demo/inicio-hero.jpg'
 const HERO_ASPECT = getGallerySection('inicio_hero').aspect
 const FEATURED_ASPECT = getGallerySection('inicio_destacados').aspect
 
-const featuredDefault = [
-  {
-    img: '/demo/inicio-destacado-susurro-primaveral.jpg',
-    alt: 'Ramo de primavera',
-    title: 'Susurro primaveral',
-    desc: 'Composición ligera para interiores luminosos.',
-  },
-  {
-    img: '/demo/inicio-destacado-elegancia-natural.jpg',
-    alt: 'Arreglo silvestre',
-    title: 'Elegancia natural',
-    desc: 'Texturas profundas para rincones con carácter.',
-  },
-  {
-    img: '/demo/inicio-destacado-pureza-blanco.jpg',
-    alt: 'Tulipanes blancos',
-    title: 'Pureza en blanco',
-    desc: 'Línea minimalista para estilos contemporáneos.',
-  },
-]
-
 export default function Inicio() {
-  const demoMode = useDemoMode()
   const { photos: heroPhotos, loading: heroLoading } = usePhotos('inicio_hero')
   const { photos: destacados } = usePhotos('inicio_destacados')
   const heroTitulo = useContent('inicio_hero_titulo', textDefaults.inicio_hero_titulo)
   const heroTexto = useContent('inicio_hero_texto', textDefaults.inicio_hero_texto)
-  const heroImg = firstPhotoUrl(heroPhotos, INICIO_HERO_IMG, demoMode)
-  const heroAlt = firstPhotoAlt(heroPhotos, `Arreglo floral artesanal de ${site.name}`, demoMode)
-  const featured = photosOr(destacados, featuredDefault, demoMode)
+  const heroImg = firstPhotoUrl(heroPhotos)
+  const heroAlt = firstPhotoAlt(heroPhotos, `Arreglo floral artesanal de ${site.name}`)
+  const featured = photosOr(destacados)
 
   return (
     <div className="pt-32">

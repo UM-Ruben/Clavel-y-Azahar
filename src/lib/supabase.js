@@ -7,9 +7,8 @@
 //  Postgres (ver `supabase/schema.sql`), que solo permiten escribir a la dueña
 //  cuando ha iniciado sesión.
 //
-//  Si las variables no están definidas (p. ej. antes de configurar Supabase),
-//  `supabase` vale `null` y TODA la web sigue funcionando con sus valores por
-//  defecto (los textos/fotos actuales), sin romperse. Ver `src/lib/content.js`.
+//  Si las variables no están definidas, `supabase` vale `null`: la web conserva
+//  sus textos por defecto y muestra huecos neutros en las zonas de fotografías.
 // ============================================================================
 import { createClient } from '@supabase/supabase-js'
 import { SUPABASE_URL as url, SUPABASE_ANON_KEY as anonKey, isSupabaseConfigured } from './rest'

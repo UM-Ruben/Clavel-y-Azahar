@@ -20,7 +20,8 @@ Web de **Clavel y Azahar** (eslogan «El nuevo aroma de Entrerramblas»), floris
 La web incluye un panel privado en **`/naniPanel`** para que la dueña suba fotos, cree
 eventos y edite textos y datos del negocio **sin tocar código**. La web pública
 sigue siendo estática y rápida; el contenido editable se carga de la base de datos
-y, si aún no hay nada, se muestran los valores de ejemplo (la web nunca se rompe).
+y, si aún no hay fotografías, se muestran huecos neutros hasta que Nani publique
+las imágenes reales. El proyecto de producción no incluye fotos de demostración.
 Las fotos se recortan para cada zona, aceptan HEIC de iPhone, se publican de forma
 atómica y conservan un historial recuperable durante 30 días.
 

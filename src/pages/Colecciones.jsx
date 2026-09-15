@@ -5,54 +5,15 @@ import Seo from '../components/Seo'
 import { usePhotos, photosOr, useContent, useCollections } from '../lib/content'
 import { collectionCategory } from '../lib/collections'
 import { textDefaults } from '../lib/textDefaults'
-import { useDemoMode } from '../lib/demoMode'
 import EmptyGallery from '../components/EmptyGallery'
 import SmartImage from '../components/SmartImage'
 
 const INITIAL_VISIBLE = 12
 
-// Apartados de ejemplo, solo para /demo (ver nota en Inicio.jsx: la demo
-// enseña siempre el diseño «relleno», nunca depende de lo que haya —o falte—
-// en Supabase). En la web real, la dueña crea sus propios apartados desde el
-// panel («Colecciones»): título, breve descripción y fotos, en el número que
-// ella quiera. Imágenes autoalojadas en /public/demo.
-const demoCollections = [
-  {
-    id: 'demo-temporada',
-    title: 'Ramos de Temporada',
-    description: 'Ramos hechos a mano con la flor fresca de cada estación.',
-    photos: [
-      { img: '/demo/colecciones-temporada-despertar-primavera.jpg', alt: 'Ramo despertar de primavera' },
-      { img: '/demo/colecciones-temporada-cosecha-otono.jpg', alt: 'Arreglo de cosecha de otoño' },
-      { img: '/demo/colecciones-temporada-pradera-silvestre.jpg', alt: 'Ramo de pradera silvestre' },
-    ],
-  },
-  {
-    id: 'demo-centros',
-    title: 'Centros de Mesa',
-    description: 'Arreglos para tu mesa, del detalle íntimo a la gran celebración.',
-    photos: [
-      { img: '/demo/colecciones-centro-gran-finca.jpg', alt: 'Centro de mesa elegante para comedor' },
-      { img: '/demo/colecciones-centro-minimo-escultorico.jpg', alt: 'Centro de mesa minimalista moderno' },
-    ],
-  },
-  {
-    id: 'demo-exoticas',
-    title: 'Plantas Exóticas',
-    description: 'Plantas raras y exóticas para dar personalidad a cualquier rincón.',
-    photos: [
-      { img: '/demo/colecciones-exotica-monstera-albo.jpg', alt: 'Monstera Deliciosa' },
-      { img: '/demo/colecciones-exotica-paphiopedilum.jpg', alt: 'Orquídea rara' },
-      { img: '/demo/colecciones-exotica-anthurium-terciopelo.jpg', alt: 'Anthurium Clarinervium' },
-    ],
-  },
-]
-
 export default function Colecciones() {
-  const demoMode = useDemoMode()
   const { collections: collectionsDb } = useCollections()
   const intro = useContent('colecciones_intro', textDefaults.colecciones_intro)
-  const collections = demoMode ? demoCollections : (collectionsDb || [])
+  const collections = collectionsDb || []
 
   return (
     <div className="pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
@@ -80,10 +41,9 @@ export default function Colecciones() {
 }
 
 function CollectionSection({ collection }) {
-  const demoMode = useDemoMode()
   const [visible, setVisible] = useState(INITIAL_VISIBLE)
   const { photos: photosDb } = usePhotos(collectionCategory(collection.id))
-  const photos = photosOr(photosDb, collection.photos || [], demoMode)
+  const photos = photosOr(photosDb)
 
   return (
     <section className="mb-section-gap last:mb-0">

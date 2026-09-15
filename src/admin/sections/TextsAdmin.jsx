@@ -145,7 +145,11 @@ function SubscriptionsEditor({ value, saving, onSave }) {
               aspect={4 / 3}
               onUploaded={async (upload) => {
                 const result = await uploadEventMedia(upload, 'suscripciones')
-                setCard(i, { img: result.url, image_path: result.path, original_path: result.originalPath })
+                const next = cards.map((item, index) => index === i
+                  ? { ...item, img: result.url, image_path: result.path, original_path: result.originalPath }
+                  : item)
+                await onSave(next)
+                setCards(next)
                 return result
               }}
             />

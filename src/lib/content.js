@@ -93,18 +93,9 @@ export function usePhotos(category) {
 }
 
 // Normaliza las filas de la BD a la forma que esperan las páginas
-// ({ img, alt, badge, title, desc }). Si no hay fotos reales, solo se usa el
-// array de ejemplo en modo demo (ver src/lib/demoMode.jsx); en la web real
-// devuelve un array vacío, para que la página muestre un hueco neutro en vez
-// de fotos de mentira.
-//
-// En modo demo enseñamos SIEMPRE las fotos de ejemplo (nunca las reales de
-// Supabase): la vista /demo es un escaparate del diseño y debe verse completa
-// siempre, sin depender de lo que haya —o falte, o esté roto— en la BD. Antes
-// usaba la foto real si existía, y si esa foto se había borrado del Storage la
-// demo salía vacía (con el hueco «image» en vez del diseño relleno).
-export function photosOr(dbPhotos, fallback, demoMode = false) {
-  if (demoMode) return fallback
+// ({ img, alt, badge, title, desc }). Si todavía no hay fotos publicadas,
+// devuelve un array vacío para que la web muestre su estado neutro.
+export function photosOr(dbPhotos) {
   if (dbPhotos && dbPhotos.length > 0) {
     return dbPhotos.map((p) => ({
       img: p.image_url,
@@ -117,21 +108,18 @@ export function photosOr(dbPhotos, fallback, demoMode = false) {
   return []
 }
 
-// URL de la primera foto de una categoría (huecos de 1 sola imagen). En modo
-// demo, siempre la foto de ejemplo (ver nota en photosOr). Fuera de demo: la
-// foto real si existe, o `null` (hueco neutro) si no hay.
-export function firstPhotoUrl(dbPhotos, fallbackUrl, demoMode = false) {
-  if (demoMode) return fallbackUrl
+// URL de la primera foto de una categoría (huecos de 1 sola imagen).
+// Si no hay foto publicada, devuelve `null` y se muestra un hueco neutro.
+export function firstPhotoUrl(dbPhotos) {
   if (dbPhotos && dbPhotos.length > 0) return dbPhotos[0].image_url
   return null
 }
 
 // Texto alternativo (alt) de la primera foto de una categoría, para los huecos
 // de 1 sola imagen. Usa el que haya escrito la dueña en el panel; si no lo ha
-// puesto (o en modo demo, o si no hay foto), cae al alt por defecto de la página
-// —así el `alt` nunca queda vacío (bien para Google y accesibilidad).
-export function firstPhotoAlt(dbPhotos, fallbackAlt, demoMode = false) {
-  if (!demoMode && dbPhotos && dbPhotos.length > 0 && dbPhotos[0].alt) {
+// puesto o no hay foto, cae al alt por defecto de la página.
+export function firstPhotoAlt(dbPhotos, fallbackAlt) {
+  if (dbPhotos && dbPhotos.length > 0 && dbPhotos[0].alt) {
     return dbPhotos[0].alt
   }
   return fallbackAlt

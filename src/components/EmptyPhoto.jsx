@@ -1,5 +1,5 @@
 // Hueco neutro para un espacio de UNA foto (heros, cabeceras…) cuando aún no
-// hay foto real subida y no estamos en modo demo (ver src/lib/demoMode.jsx).
+// hay una foto real publicada.
 // Se coloca dentro del mismo contenedor con aspect-ratio de siempre, así que
 // el diseño no se mueve ni un píxel cuando la dueña sube su foto.
 //

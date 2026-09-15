@@ -31,24 +31,24 @@ export const textDefaults = {
 }
 
 // Tarjetas de suscripción (estructura). Se editan como bloque en el panel.
-// Imágenes autoalojadas en /public/demo (ver nota en Inicio.jsx).
+// Las fotos empiezan vacías y se publican exclusivamente desde el panel.
 export const subscriptionsDefault = [
   {
-    img: '/demo/suscripcion-esencial.jpg',
+    img: '',
     title: 'Esencial',
     freq: 'ENTREGA SEMANAL',
     desc: 'Una cuidada selección de flores frescas de temporada de una sola variedad envueltas en papel kraft, listas para tu florero favorito.',
     featured: false,
   },
   {
-    img: '/demo/suscripcion-clasico.jpg',
+    img: '',
     title: 'Clásico',
     freq: 'ENTREGA QUINCENAL',
     desc: 'Un arreglo exuberante y personalizado que combina flores principales premium y follaje texturizado, entregado en una vasija de cerámica.',
     featured: true,
   },
   {
-    img: '/demo/suscripcion-gran-estilo.jpg',
+    img: '',
     title: 'Gran Estilo',
     freq: 'ENTREGA MENSUAL',
     desc: 'Nuestra propuesta más espectacular. Una pieza escultórica de gran tamaño diseñada para ser el centro de atención de cualquier recibidor o salón espacioso.',

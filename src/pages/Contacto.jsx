@@ -2,21 +2,16 @@ import { useState } from 'react'
 import Seo from '../components/Seo'
 import { useBusiness, usePhotos, firstPhotoUrl, firstPhotoAlt, useContent } from '../lib/content'
 import { textDefaults } from '../lib/textDefaults'
-import { useDemoMode } from '../lib/demoMode'
 import SmartImage from '../components/SmartImage'
 import { getGallerySection } from '../config/gallery'
 
 const LOCAL_ASPECT = getGallerySection('contacto_local').aspect
 
-// Autoalojada en /public/demo (ver nota en Inicio.jsx).
-const CONTACTO_LOCAL_IMG = '/demo/contacto-local.jpg'
-
 export default function Contacto() {
-  const demoMode = useDemoMode()
   const b = useBusiness()
   const { photos: localDb, loading: localLoading } = usePhotos('contacto_local')
-  const localImg = firstPhotoUrl(localDb, CONTACTO_LOCAL_IMG, demoMode)
-  const localAlt = firstPhotoAlt(localDb, `Fachada de ${b.name} en ${b.address.district}, ${b.address.city}`, demoMode)
+  const localImg = firstPhotoUrl(localDb)
+  const localAlt = firstPhotoAlt(localDb, `Fachada de ${b.name} en ${b.address.district}, ${b.address.city}`)
   const intro = useContent('contacto_intro', textDefaults.contacto_intro)
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '', website: '' })
@@ -33,9 +28,9 @@ export default function Contacto() {
     if (formData.website) return
     setStatus('sending')
 
-    // Modo demo mientras el endpoint siga siendo el placeholder de la plantilla.
+    // Nunca simulamos un envío correcto si falta configurar el servicio real.
     if (!b.formEndpoint || b.formEndpoint.includes('TU_ID_FORMULARIO')) {
-      setStatus('sent')
+      setStatus('error')
       return
     }
 

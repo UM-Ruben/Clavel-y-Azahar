@@ -78,9 +78,9 @@ test('una comprobación que no responde termina y permite reintentar', async ({ 
   await expect(page.getByRole('heading', { name: 'Imagen principal', exact: true })).toBeVisible()
 })
 
-test('una foto real se recorta y un fallo al publicar conserva la foto anterior', async ({ page }) => {
+test('una foto válida se recorta y un fallo al publicar conserva la foto anterior', async ({ page }) => {
   await authenticated(page)
-  const original = { id: 'photo-1', category: 'inicio_hero', image_url: '/demo/colecciones-temporada-pradera-silvestre.jpg', revision: 1, published: true, status: 'published' }
+  const original = { id: 'photo-1', category: 'inicio_hero', image_url: '/logo-original.png', revision: 1, published: true, status: 'published' }
   await page.route('**/rest/v1/photos?**', (route) => route.fulfill({ json: [original] }))
   let uploads = 0
   await page.route('**/storage/v1/object/media-staging/**', (route) => {
@@ -90,7 +90,7 @@ test('una foto real se recorta y un fallo al publicar conserva la foto anterior'
   await page.route('**/functions/v1/publish-photo', (route) => route.fulfill({ status: 500, json: { error: 'Storage unavailable' } }))
   await page.goto(ADMIN_PATH)
   await expect(page.getByAltText('Vista previa de la foto publicada')).toBeVisible()
-  await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
+  await page.locator('input[type=file]').setInputFiles('public/logo-orginal2.png')
   await expect(page.getByRole('slider', { name: 'Acercar o alejar la foto' })).toBeVisible()
   await page.getByRole('button', { name: 'Publicar', exact: true }).click()
   await page.getByRole('button', { name: 'Publicar foto', exact: true }).click()
@@ -105,7 +105,7 @@ test('publicar JPEG espera al servidor y actualiza la fotografía', async ({ pag
   await authenticated(page)
   let publishBody
   let finishPublish
-  const published = { id: 'photo-new', category: 'inicio_hero', image_url: '/demo/colecciones-temporada-pradera-silvestre.jpg', revision: 1, published: true, status: 'published' }
+  const published = { id: 'photo-new', category: 'inicio_hero', image_url: '/logo-orginal2.png', revision: 1, published: true, status: 'published' }
   await page.route('**/storage/v1/object/media-staging/**', (route) => route.fulfill({ json: { Key: 'test' } }))
   await page.route('**/functions/v1/publish-photo', async (route) => {
     publishBody = route.request().postDataJSON()
@@ -114,7 +114,7 @@ test('publicar JPEG espera al servidor y actualiza la fotografía', async ({ pag
   })
   await page.goto(ADMIN_PATH)
   await expect(page.getByRole('button', { name: 'Elegir foto' })).toBeVisible()
-  await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
+  await page.locator('input[type=file]').setInputFiles('public/logo-orginal2.png')
   await expect(page.getByRole('slider')).toBeVisible()
   await page.getByRole('button', { name: 'Publicar', exact: true }).click()
   await expect.poll(() => !!publishBody).toBe(true)
@@ -131,7 +131,7 @@ test('la vista previa sigue el recorte y el zoom antes de publicar', async ({ pa
   await authenticated(page)
   await page.goto(ADMIN_PATH)
   await expect(page.getByRole('button', { name: 'Elegir foto' })).toBeVisible()
-  await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
+  await page.locator('input[type=file]').setInputFiles('public/logo-orginal2.png')
 
   const livePreview = page.locator('[data-live-crop="true"]')
   await expect(livePreview).toBeVisible()
@@ -153,11 +153,11 @@ test('el historial muestra la versión actual y se refresca al reemplazarla', as
   await authenticated(page)
   const original = {
     id: 'photo-history', category: 'inicio_hero',
-    image_url: '/demo/inicio-hero-flores-crema.jpg', revision: 1,
+    image_url: '/logo-original.png', revision: 1,
     published: true, status: 'published',
   }
   const updated = {
-    ...original, image_url: '/demo/colecciones-temporada-pradera-silvestre.jpg', revision: 2,
+    ...original, image_url: '/logo-orginal2.png', revision: 2,
   }
   let historyRequests = 0
   await page.route('**/rest/v1/photos?**', (route) => route.fulfill({ json: [original] }))
@@ -174,7 +174,7 @@ test('el historial muestra la versión actual y se refresca al reemplazarla', as
 
   await page.goto(ADMIN_PATH)
   await expect(page.getByRole('button', { name: 'Historial y papelera (1)' })).toBeVisible()
-  await page.locator('input[type=file]').setInputFiles('public/demo/colecciones-temporada-pradera-silvestre.jpg')
+  await page.locator('input[type=file]').setInputFiles('public/logo-orginal2.png')
   await page.getByRole('button', { name: 'Publicar', exact: true }).click()
   await page.getByRole('button', { name: 'Publicar foto', exact: true }).click()
 
@@ -183,4 +183,41 @@ test('el historial muestra la versión actual y se refresca al reemplazarla', as
   await expect(page.getByText('1 actuales · 1 anteriores')).toBeVisible()
   await expect(page.getByText('Versión visible actualmente')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Restaurar' })).toBeVisible()
+})
+
+test('una foto de suscripción se guarda sin modificar las otras tarjetas', async ({ page }) => {
+  await authenticated(page)
+  const cards = [
+    { img: '', title: 'Esencial', freq: 'SEMANAL', desc: 'Primera', featured: false },
+    { img: '/logo-original.png', title: 'Clásico', freq: 'QUINCENAL', desc: 'Segunda', featured: true },
+    { img: '/logo-emblema.svg', title: 'Gran Estilo', freq: 'MENSUAL', desc: 'Tercera', featured: false },
+  ]
+  let savedBody
+
+  await page.route('**/rest/v1/content**', async (route) => {
+    if (route.request().method() === 'GET') {
+      return route.fulfill({ json: [{ key: 'servicios_suscripciones', value: cards }] })
+    }
+    savedBody = route.request().postDataJSON()
+    return route.fulfill({ json: [] })
+  })
+  await page.route('**/storage/v1/object/media-staging/**', (route) => route.fulfill({ json: { Key: 'test' } }))
+  await page.route('**/functions/v1/publish-photo', (route) => route.fulfill({ json: {
+    url: '/logo-orginal2.png',
+    path: 'owner/suscripciones/operation/published.jpg',
+    originalPath: 'owner/suscripciones/operation/original.png',
+  } }))
+
+  await page.goto(ADMIN_PATH)
+  await page.getByRole('button', { name: 'Textos', exact: true }).click()
+  await expect(page.getByText('Servicios — Tarjetas de suscripción')).toBeVisible()
+  await page.locator('input[type=file]').first().setInputFiles('public/logo-orginal2.png')
+  await page.getByRole('button', { name: 'Publicar', exact: true }).first().click()
+
+  await expect.poll(() => savedBody).toBeTruthy()
+  const savedCards = savedBody.value
+  expect(savedCards[0].img).toBe('/logo-orginal2.png')
+  expect(savedCards[1].img).toBe(cards[1].img)
+  expect(savedCards[2].img).toBe(cards[2].img)
+  await expect(page.getByText('Foto publicada correctamente.')).toBeVisible()
 })

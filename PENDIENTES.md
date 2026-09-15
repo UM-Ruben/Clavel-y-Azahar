@@ -84,17 +84,19 @@ Lista de lo que hay que **pedir a la encargada** y dónde se aplica cada dato.
 - [ ] Crear cuenta gratuita en [Formspree](https://formspree.io) con el email del
   negocio y pegar el endpoint en `site.js` → `formEndpoint`.
 
-- Nota: mientras tanto el formulario funciona en "modo demo" (no envía nada).
+- Nota: mientras tanto el formulario informa de que no está disponible y no
+  simula un envío correcto.
 
 ## 7. Imágenes
 
-- [ ] `og-image.jpg` (1200×630, foto de la tienda o un ramo) → subir a `/public`
-  (ya está referenciada en `index.html`; solo falta el archivo y el dominio real)
+- [X] La imagen social utiliza provisionalmente el logotipo real
+  (`logo-orginal2.png`), por lo que compartir la web no apunta a un archivo
+  inexistente. Más adelante se puede sustituir por una fotografía 1200×630.
 - [ ] `apple-touch-icon.png` (180×180) → subir a `/public` y descomentar la línea
   correspondiente en `index.html`
 - [ ] Nani subirá desde el panel las fotos reales de la tienda y de los productos.
-  Hasta entonces, la web pública muestra huecos neutros; las imágenes de muestra solo
-  aparecen en `/demo`.
+  Hasta entonces, la web pública muestra huecos neutros. El proyecto no incluye
+  fotos de demostración.
 
 ## 8. Contenido a revisar con la encargada
 
